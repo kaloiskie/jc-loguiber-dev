@@ -63,16 +63,17 @@ function Projects() {
                         Live Site ↗
                       </a>
                     )}
-                    {proj.github && (
+                    {proj.github?.map((gh) => (
                       <a
-                        href={proj.github}
+                        key={gh}
+                        href={gh}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-mono text-[11px] px-2 py-0.5 text-text-muted border border-border-light hover:border-accent hover:text-accent transition-colors"
                       >
                         GitHub ↗
                       </a>
-                    )}
+                    ))}
                   </div>
                 )}
 

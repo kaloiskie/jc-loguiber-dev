@@ -71,6 +71,10 @@ export const projects: Project[] = [
       'Cross-org collaboration with Incredible Gaming Inc.',
     ],
     url: 'https://northman-gaming-corporation.site/portfolio',
-    github: 'https://github.com/Incredible-Gaming-Inc',
+    github: [
+      'https://github.com/Incredible-Gaming-Inc',
+      'https://github.com/Sinbad-Studios',
+      'https://github.com/Northman-Gaming-Dev',
+    ],
   },
 ]

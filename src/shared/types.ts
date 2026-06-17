@@ -5,7 +5,7 @@ export interface Project {
   status: 'Production' | 'Active' | 'Internal'
   highlights: string[]
   url?: string
-  github?: string
+  github?: string[]
 }
 
 export interface Section {
