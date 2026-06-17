@@ -108,7 +108,7 @@ function Hero() {
           transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
           className="hero-stats"
         >
-          {hero.stats.map((stat, i) => (
+          {hero.stats.map((stat) => (
             <div key={stat.label} className="hero-stat">
               <span className="hero-stat-value">{stat.value}</span>
               <span className="hero-stat-label">{stat.label}</span>
