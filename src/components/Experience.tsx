@@ -13,8 +13,10 @@ function TimelineCard({ exp, index }: { exp: ExperienceItem; index: number }) {
       initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
-      className="relative pl-8 sm:pl-0"
+      className="relative pl-10 sm:pl-0"
     >
+      <div className="absolute left-2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/30 via-primary/10 to-transparent sm:hidden" />
+      <div className="absolute left-[5px] top-6 w-[7px] h-[7px] rounded-full bg-primary sm:hidden animate-pulse-glow" />
       <div className={`sm:flex items-center ${index % 2 === 0 ? '' : 'sm:flex-row-reverse'}`}>
         <div className="hidden sm:block flex-1" />
         <div className="hidden sm:flex items-center justify-center w-8 shrink-0">
@@ -41,7 +43,7 @@ function TimelineCard({ exp, index }: { exp: ExperienceItem; index: number }) {
               {exp.highlights.map((h, i) => (
                 <li key={i} className="text-text-secondary text-sm leading-relaxed flex items-start gap-2">
                   {index % 2 === 0 ? (
-                    <span className="hidden sm:block text-primary mt-1 shrink-0">◆</span>
+                    <span className="text-primary mt-1 shrink-0">◆</span>
                   ) : (
                     <span className="text-primary mt-1 shrink-0">◆</span>
                   )}

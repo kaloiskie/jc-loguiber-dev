@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { FaMapMarkerAlt, FaEnvelope, FaPhone, FaChevronDown } from 'react-icons/fa'
 import { hero } from '../data/resume'
@@ -14,7 +14,7 @@ interface Particle {
 
 function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const mouseRef = useRef({ x: -9999, y: -9999 })
   const particlesRef = useRef<Particle[]>([])
   const animFrameRef = useRef<number>(0)
 
@@ -61,8 +61,8 @@ function Hero() {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1
 
-        const dx = p.x - mousePos.x
-        const dy = p.y - mousePos.y
+        const dx = p.x - mouseRef.current.x
+        const dy = p.y - mouseRef.current.y
         const dist = Math.sqrt(dx * dx + dy * dy)
 
         if (dist < 150) {
@@ -107,7 +107,7 @@ function Hero() {
     animate()
 
     const handleMouse = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY })
+      mouseRef.current = { x: e.clientX, y: e.clientY }
     }
     window.addEventListener('mousemove', handleMouse)
 
@@ -116,7 +116,7 @@ function Hero() {
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', handleMouse)
     }
-  }, [initParticles, mousePos])
+  }, [initParticles])
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">

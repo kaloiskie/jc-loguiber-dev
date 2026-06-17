@@ -18,7 +18,7 @@ function Education() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Education & <span className="gradient-text">Awards</span>
+            Education
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto" />
         </motion.div>

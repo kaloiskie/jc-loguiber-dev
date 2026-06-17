@@ -17,7 +17,7 @@ function LeadershipCard({ item, index }: { item: LeadershipItem; index: number }
     >
       <div className="flex items-start gap-4">
         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-1">
-          {index === 0 ? <FaUserTie size={18} /> : <FaUsers size={18} />}
+          {item.role.includes('President') || item.role.includes('Editor-in-Chief') ? <FaUserTie size={18} /> : <FaUsers size={18} />}
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-3 mb-1">

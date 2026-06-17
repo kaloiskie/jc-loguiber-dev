@@ -28,7 +28,7 @@ function Footer() {
               <FaPhone />
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/kaloiskie"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"
@@ -37,7 +37,7 @@ function Footer() {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://linkedin.com/in/jc-loguiber"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"

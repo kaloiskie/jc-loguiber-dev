@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBars, FaTimes, FaArrowUp, FaEnvelope, FaPhone } from 'react-icons/fa'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Hero from './components/Hero'
 import Objective from './components/Objective'
 import Experience from './components/Experience'
@@ -48,6 +50,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-surface">
+      <Analytics />
+      <SpeedInsights />
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -111,6 +115,22 @@ function App() {
                     {section.label}
                   </button>
                 ))}
+                <div className="border-t border-white/5 mt-2 pt-2 flex gap-2">
+                  <a
+                    href="mailto:jcarlo.loguiber@gmail.com"
+                    className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-text-secondary hover:text-accent hover:bg-white/5 transition-all text-center"
+                  >
+                    <FaEnvelope className="inline mr-1.5" size={14} />
+                    Email
+                  </a>
+                  <a
+                    href="tel:+639514567270"
+                    className="flex-1 px-4 py-2 rounded-lg text-sm font-medium text-text-secondary hover:text-accent hover:bg-white/5 transition-all text-center"
+                  >
+                    <FaPhone className="inline mr-1.5" size={14} />
+                    Call
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}
@@ -144,7 +164,7 @@ function App() {
         )}
       </AnimatePresence>
 
-      <div className="fixed bottom-8 left-8 z-50 flex-col gap-3 hidden lg:flex">
+      <div className="fixed bottom-8 left-8 z-50 flex-col gap-3 hidden md:flex">
         <a
           href="mailto:jcarlo.loguiber@gmail.com"
           className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"

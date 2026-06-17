@@ -30,8 +30,8 @@ function Objective() {
           </div>
 
           <div className="relative glass rounded-2xl p-8 sm:p-10">
-            <FaQuoteLeft className="text-primary/20 text-4xl absolute top-6 left-6" />
-            <p className="text-lg text-text-secondary leading-relaxed pl-8">
+            <FaQuoteLeft className="text-primary/20 text-3xl absolute top-6 left-6" />
+            <p className="text-lg text-text-secondary leading-relaxed pl-12">
               {objective.content}
             </p>
           </div>
