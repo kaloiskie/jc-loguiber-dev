@@ -1,4 +1,1 @@
-import type { Org } from './organizations.data'
-
-export { orgs } from './organizations.data'
-export type { Org }
+export { default as Organizations } from './Organizations'
