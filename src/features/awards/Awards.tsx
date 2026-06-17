@@ -7,42 +7,54 @@ function Awards() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <section id="awards" className="py-28 relative">
-      <div className="section-container relative">
+    <section id="awards" className="py-24">
+      <div className="section-container">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Employment <span className="gradient-text">Recognition</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto" />
-        </motion.div>
+          <p className="section-label mb-3">06 / Awards</p>
+          <div className="ruled-line pb-8 mb-12">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
+              Recognition.
+            </h2>
+          </div>
 
-        <div className="max-w-3xl mx-auto">
-          {awards.map((award, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-              className="glass rounded-2xl p-8 text-center hover:border-primary/20 transition-all duration-300"
-            >
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-6">
-                <FaTrophy className="text-accent text-2xl" />
-              </div>
-              <h3 className="text-2xl font-bold mb-2">{award.title}</h3>
-              <p className="text-primary font-medium mb-1">{award.organization}</p>
-              <p className="text-accent text-sm font-medium mb-4">{award.date}</p>
-              <p className="text-text-secondary leading-relaxed max-w-xl mx-auto">
-                {award.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+          <div className="max-w-3xl">
+            {awards.map((award, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.15 }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 flex items-center justify-center shrink-0 mt-1">
+                    <FaTrophy className="text-accent" size={20} />
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
+                      <h3 className="font-display text-lg font-semibold text-text">
+                        {award.title}
+                      </h3>
+                      <span className="font-mono text-xs text-text-muted">
+                        {award.date}
+                      </span>
+                    </div>
+                    <p className="text-accent text-sm font-medium mb-2">
+                      {award.organization}
+                    </p>
+                    <p className="text-text-muted text-sm leading-relaxed">
+                      {award.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )

@@ -1,12 +1,18 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { experiences } from './experience.data'
+import { projects } from './projects.data'
 
-function Experience() {
+const statusColors: Record<string, string> = {
+  Production: 'text-green-400 border-green-400/20 bg-green-400/5',
+  Active: 'text-accent border-accent/20 bg-accent/5',
+  Internal: 'text-text-muted border-border-light bg-bg',
+}
+
+function Projects() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   return (
-    <section id="experience" className="py-24">
+    <section id="projects" className="py-24">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -14,35 +20,50 @@ function Experience() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">03 / Experience</p>
+          <p className="section-label mb-3">04 / Projects</p>
           <div className="ruled-line pb-8 mb-12">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
-              Where I have shipped.
+              Things I have built.
             </h2>
           </div>
 
           <div className="max-w-3xl">
-            {experiences.map((exp, i) => (
+            {projects.map((proj, i) => (
               <motion.div
-                key={i}
+                key={proj.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
                 className="mb-12"
               >
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
+                <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h3 className="font-display text-xl font-semibold text-text">
-                    {exp.company}
+                    {proj.title}
                   </h3>
-                  <span className="font-mono text-xs text-text-muted">
-                    {exp.period}
+                  <span
+                    className={`font-mono text-[10px] px-2 py-0.5 border ${statusColors[proj.status]}`}
+                  >
+                    {proj.status}
                   </span>
                 </div>
-                <p className="text-accent text-sm font-medium mb-3">
-                  {exp.role}
+
+                <p className="text-text-muted text-sm leading-relaxed mb-3">
+                  {proj.description}
                 </p>
-                <ul className="space-y-2">
-                  {exp.highlights.map((h, j) => (
+
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {proj.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="font-mono text-[11px] px-2 py-0.5 text-text-muted border border-border-light"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <ul className="space-y-1.5">
+                  {proj.highlights.map((h, j) => (
                     <li
                       key={j}
                       className="text-text-muted text-sm flex items-start gap-2 leading-relaxed"
@@ -52,7 +73,8 @@ function Experience() {
                     </li>
                   ))}
                 </ul>
-                {i < experiences.length - 1 && (
+
+                {i < projects.length - 1 && (
                   <div className="mt-10 ruled-line" />
                 )}
               </motion.div>
@@ -64,4 +86,4 @@ function Experience() {
   )
 }
 
-export default Experience
+export default Projects

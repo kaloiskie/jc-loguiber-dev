@@ -1,8 +1,10 @@
 export const hero = {
   name: 'Jhon Carlo L. Loguiber',
-  title: 'Full-Stack Developer',
-  tagline: 'TypeScript full-stack developer building production web systems from database design to deployment.',
-  location: 'Mankilam, Tagum City, Davao del Norte, Philippines — 8100',
+  title: 'Full-Stack Developer · IT Supervisor · PHT (UTC+8)',
+  pitch:
+    'I build and ship production web systems for a licensed lottery operator in the Philippines — from database schema to deployment. Looking for remote backend or full-stack engineering roles.',
+  location: 'Tagum City, Davao del Norte, Philippines',
   email: 'jcarlo.loguiber@gmail.com',
-  phone: '+63 951-456-7270',
+  github: 'https://github.com/kaloiskie',
+  cvLink: '/cv.pdf',
 }

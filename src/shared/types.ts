@@ -1,3 +1,11 @@
+export interface Project {
+  title: string
+  description: string
+  tech: string[]
+  status: 'Production' | 'Active' | 'Internal'
+  highlights: string[]
+}
+
 export interface Section {
   id: string
   label: string
@@ -14,7 +22,6 @@ export interface ExperienceItem {
 export interface SkillCategory {
   title: string
   items: string[]
-  icon?: React.ComponentType<{ className?: string }>
 }
 
 export interface Award {
@@ -29,17 +36,4 @@ export interface EducationItem {
   school: string
   period: string
   details: string[]
-}
-
-export interface LeadershipItem {
-  role: string
-  organization: string
-  period: string
-  details: string[]
-}
-
-export interface Interest {
-  title: string
-  description: string
-  icon: React.ComponentType<{ className?: string }>
 }

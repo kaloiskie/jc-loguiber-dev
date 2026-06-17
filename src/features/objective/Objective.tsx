@@ -1,39 +1,32 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FaQuoteLeft } from 'react-icons/fa'
-import { objective } from './objective.data'
+import { about } from './objective.data'
 
-function Objective() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
+function About() {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="objective" className="py-28 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface-alt/30 to-transparent" />
-      <div className="section-container relative">
+    <section id="about" className="py-24">
+      <div className="section-container">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <div className="text-center mb-16">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.1, duration: 0.6 }}
-              className="text-3xl sm:text-4xl font-bold mb-4"
-            >
-              Career <span className="gradient-text">Objective</span>
-            </motion.h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto" />
+          <p className="section-label mb-3">01 / About</p>
+          <div className="ruled-line pb-8 mb-12">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
+              I build systems that run.
+            </h2>
           </div>
 
-          <div className="relative glass rounded-2xl p-10 sm:p-12">
-            <FaQuoteLeft className="text-primary/20 text-3xl absolute top-6 left-6" />
-            <p className="text-lg text-text-secondary leading-relaxed pl-12">
-              {objective.content}
-            </p>
+          <div className="max-w-3xl space-y-5">
+            {about.paragraphs.map((p, i) => (
+              <p key={i} className="text-text-muted leading-relaxed">
+                {p}
+              </p>
+            ))}
           </div>
         </motion.div>
       </div>
@@ -41,4 +34,4 @@ function Objective() {
   )
 }
 
-export default Objective
+export default About

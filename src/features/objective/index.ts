@@ -1,1 +1,1 @@
-export { default as Objective } from './Objective'
+export { default as About } from './Objective'

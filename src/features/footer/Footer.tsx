@@ -1,76 +1,91 @@
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHeart } from 'react-icons/fa'
-import { hero } from '../hero/hero.data'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+import { FaEnvelope, FaGithub, FaLinkedin, FaMapMarkerAlt, FaClock } from 'react-icons/fa'
 
-function Footer() {
+function Contact() {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+
   return (
-    <footer className="relative py-20 border-t border-white/5">
-      <div className="absolute inset-0 bg-gradient-to-t from-surface-alt/50 to-transparent" />
-      <div className="section-container relative">
-        <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-2xl font-bold gradient-text mb-4">{hero.name}</h3>
-          <p className="text-text-secondary mb-8 max-w-md mx-auto">
-            Full-stack developer building production web systems. Open to remote backend and full-stack engineering roles.
-          </p>
-
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <a
-              href={`mailto:${hero.email}`}
-              className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"
-              aria-label="Email"
-            >
-              <FaEnvelope />
-            </a>
-            <a
-              href={`tel:${hero.phone.replace(/\s/g, '')}`}
-              className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"
-              aria-label="Phone"
-            >
-              <FaPhone />
-            </a>
-            <a
-              href="https://github.com/kaloiskie"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"
-              aria-label="GitHub"
-            >
-              <FaGithub />
-            </a>
-            <a
-              href="https://linkedin.com/in/jc-loguiber"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-secondary hover:text-accent hover:border-accent/30 transition-all duration-200"
-              aria-label="LinkedIn"
-            >
-              <FaLinkedin />
-            </a>
+    <section id="contact" className="py-24">
+      <div className="section-container">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="section-label mb-3">07 / Contact</p>
+          <div className="ruled-line pb-8 mb-12">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
+              Get in touch.
+            </h2>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-text-secondary mb-6">
-            <span className="flex items-center gap-1.5">
-              <FaMapMarkerAlt className="text-primary" size={12} />
-              {hero.location}
-            </span>
-            <span className="w-1 h-1 rounded-full bg-text-secondary/30" />
-            <a href={`mailto:${hero.email}`} className="hover:text-accent transition-colors">
-              {hero.email}
-            </a>
-            <span className="w-1 h-1 rounded-full bg-text-secondary/30" />
-            <a href={`tel:${hero.phone.replace(/\s/g, '')}`} className="hover:text-accent transition-colors">
-              {hero.phone}
-            </a>
-          </div>
+          <div className="max-w-3xl">
+            <p className="text-text-muted mb-10 leading-relaxed">
+              Available for remote opportunities. Response within 24 hours.
+            </p>
 
-          <p className="text-text-secondary/50 text-sm flex items-center justify-center gap-1">
-            &copy; {new Date().getFullYear()} Jhon Carlo L. Loguiber. Built with
-            <FaHeart className="text-red-400" size={12} />
-            using React & TypeScript.
-          </p>
-        </div>
+            <div className="space-y-4 mb-10">
+              <div className="flex items-center gap-3">
+                <FaMapMarkerAlt className="text-accent shrink-0" size={14} />
+                <span className="text-text-muted text-sm">
+                  Tagum City, Davao del Norte, Philippines
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <FaClock className="text-accent shrink-0" size={14} />
+                <span className="text-text-muted text-sm">
+                  Philippine Standard Time (UTC+8)
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <FaEnvelope className="text-accent shrink-0" size={14} />
+                <a
+                  href="mailto:jcarlo.loguiber@gmail.com"
+                  className="text-text-muted text-sm hover:text-accent transition-colors"
+                >
+                  jcarlo.loguiber@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4 mb-10">
+              <a
+                href="mailto:jcarlo.loguiber@gmail.com"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-white font-medium text-sm hover:bg-accent-hover transition-colors duration-200"
+              >
+                <FaEnvelope size={14} />
+                Send Email
+              </a>
+              <a
+                href="https://github.com/kaloiskie"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border-light text-text text-sm font-medium hover:border-accent hover:text-accent transition-all duration-200"
+              >
+                <FaGithub size={14} />
+                GitHub
+              </a>
+              <a
+                href="https://linkedin.com/in/jc-loguiber"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border-light text-text text-sm font-medium hover:border-accent hover:text-accent transition-all duration-200"
+              >
+                <FaLinkedin size={14} />
+                LinkedIn
+              </a>
+            </div>
+
+            <p className="font-mono text-xs text-text-muted">
+              &copy; {new Date().getFullYear()} Jhon Carlo L. Loguiber. Built with React &amp; TypeScript.
+            </p>
+          </div>
+        </motion.div>
       </div>
-    </footer>
+    </section>
   )
 }
 
-export default Footer
+export default Contact
