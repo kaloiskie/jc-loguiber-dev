@@ -16,6 +16,7 @@ export const skillCategories: SkillCategory[] = [
       'Node.js',
       'Express.js',
       'Python',
+      'VB.NET',
     ],
   },
   {
@@ -51,6 +52,7 @@ export const skillCategories: SkillCategory[] = [
       'Ollama',
       'Telegram Bot API',
       'Python scripts',
+      'Google Apps Script',
     ],
   },
 ]
