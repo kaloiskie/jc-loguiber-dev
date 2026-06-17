@@ -61,11 +61,21 @@ function App() {
   return (
     <div className="min-h-screen bg-bg text-text">
       <Helmet
-        defaultTitle="JC Loguiber — Full-Stack Engineer"
-        titleTemplate="%s — JC Loguiber"
+        defaultTitle="Jhon Carlo L. Loguiber — Full-Stack Engineer"
+        titleTemplate="%s — Jhon Carlo L. Loguiber"
       >
         <html lang="en" />
-        <meta name="description" content="Full-Stack Engineer specializing in building modern web applications with React, TypeScript, and Node.js." />
+        <meta name="description" content="Full-Stack Engineer building modern web applications with React, TypeScript, and Node.js." />
+        <meta property="og:title" content="Jhon Carlo L. Loguiber — Full-Stack Engineer" />
+        <meta property="og:description" content="Full-Stack Engineer building modern web applications with React, TypeScript, and Node.js." />
+        <meta property="og:image" content="/helmet.png" />
+        <meta property="og:image:width" content="761" />
+        <meta property="og:image:height" content="440" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Jhon Carlo L. Loguiber — Full-Stack Engineer" />
+        <meta name="twitter:description" content="Full-Stack Engineer building modern web applications with React, TypeScript, and Node.js." />
+        <meta name="twitter:image" content="/helmet.png" />
       </Helmet>
       <Analytics />
       <SpeedInsights />
