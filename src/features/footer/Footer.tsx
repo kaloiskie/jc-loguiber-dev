@@ -14,7 +14,7 @@ function Contact() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">07 / Contact</p>
+          <p className="section-label mb-3">08 / Contact</p>
           <div className="ruled-line pb-8 mb-12">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               Get in touch.

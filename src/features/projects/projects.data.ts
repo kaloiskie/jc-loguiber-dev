@@ -60,21 +60,4 @@ export const projects: Project[] = [
       'Multi-page approval flow automation reducing manual clicks by ~70%',
     ],
   },
-  {
-    title: 'Northman Gaming Portfolio',
-    description:
-      'Corporate portfolio website for Northman Gaming Corporation, built in collaboration with Incredible Gaming Inc. Showcases the company\'s gaming operations, services, and STL platform capabilities.',
-    tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion'],
-    status: 'Production',
-    highlights: [
-      'Responsive, animated portfolio site with smooth scroll sections',
-      'Cross-org collaboration with Incredible Gaming Inc.',
-    ],
-    url: 'https://northman-gaming-corporation.site/portfolio',
-    github: [
-      'https://github.com/Incredible-Gaming-Inc',
-      'https://github.com/Sinbad-Studios',
-      'https://github.com/Northman-Gaming-Dev',
-    ],
-  },
 ]

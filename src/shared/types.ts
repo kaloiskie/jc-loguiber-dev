@@ -26,6 +26,12 @@ export interface SkillCategory {
   items: string[]
 }
 
+export interface Collaborator {
+  name: string
+  url: string
+  description: string
+}
+
 export interface Award {
   title: string
   organization: string
