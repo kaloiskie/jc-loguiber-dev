@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
 import {
@@ -40,7 +39,11 @@ function App() {
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i]
         if (section && section.offsetTop <= scrollPos) {
-          setActiveSection(navSections[i].id)
+          const id = navSections[i].id
+          setActiveSection(id)
+          if (window.location.hash !== `#${id}`) {
+            history.replaceState(null, '', `#${id}`)
+          }
           break
         }
       }
@@ -50,10 +53,21 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (hash) {
+      const el = document.getElementById(hash)
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100)
+      }
+    }
+  }, [])
+
   const scrollTo = useCallback((id: string) => {
     const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
+      window.location.hash = id
       setMobileMenuOpen(false)
     }
   }, [])
@@ -101,8 +115,8 @@ function App() {
               <NavigationMenuList className="gap-1">
                 {navSections.map((section) => (
                   <NavigationMenuItem key={section.id}>
-                    <NavigationMenuLink
-                      onSelect={() => scrollTo(section.id)}
+                    <button
+                      onClick={() => scrollTo(section.id)}
                       className={cn(
                         'px-3 py-1.5 text-sm font-medium transition-colors duration-150 cursor-pointer border-b-2 border-transparent hover:border-accent',
                         activeSection === section.id
@@ -111,7 +125,7 @@ function App() {
                       )}
                     >
                       {section.label}
-                    </NavigationMenuLink>
+                    </button>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
@@ -154,25 +168,22 @@ function App() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-48 p-1 md:hidden bg-bg border-border">
-                <NavigationMenu className="max-w-none *:w-full">
-                  <NavigationMenuList className="flex-col items-start gap-0">
-                    {navSections.map((section) => (
-                      <NavigationMenuItem key={section.id} className="w-full">
-                        <NavigationMenuLink
-                          onSelect={() => scrollTo(section.id)}
-                          className={cn(
-                            'block w-full px-3 py-2 text-sm font-medium transition-colors cursor-pointer',
-                            activeSection === section.id
-                              ? 'text-accent'
-                              : 'text-text-muted hover:text-text'
-                          )}
-                        >
-                          {section.label}
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    ))}
-                  </NavigationMenuList>
-                </NavigationMenu>
+                <div className="flex flex-col">
+                  {navSections.map((section) => (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollTo(section.id)}
+                      className={cn(
+                        'w-full px-3 py-2 text-sm font-medium text-left transition-colors cursor-pointer',
+                        activeSection === section.id
+                          ? 'text-accent'
+                          : 'text-text-muted hover:text-text'
+                      )}
+                    >
+                      {section.label}
+                    </button>
+                  ))}
+                </div>
               </PopoverContent>
             </Popover>
 
