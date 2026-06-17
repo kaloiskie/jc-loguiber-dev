@@ -13,23 +13,11 @@ function Hero() {
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="hero-photo-wrapper"
           >
-            <picture>
-              <source
-                srcSet="/profilepicture.webp 1x, /profilepicture@2x.webp 2x"
-                type="image/webp"
-              />
-              <source
-                srcSet="/profilepicture.jpg 1x, /profilepicture@2x.jpg 2x"
-                type="image/jpeg"
-              />
-              <img
-                src="/profilepicture.jpg"
-                alt="Jhon Carlo L. Loguiber"
-                loading="lazy"
-                decoding="async"
-                className="hero-photo"
-              />
-            </picture>
+            <img
+              src="/profilepicture.jpg"
+              alt="Jhon Carlo L. Loguiber"
+              className="hero-photo"
+            />
             <span className="hero-photo-dot" />
           </motion.div>
 
@@ -114,6 +102,59 @@ function Hero() {
               <span className="hero-stat-label">{stat.label}</span>
             </div>
           ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
+          className="mt-8"
+        >
+          <p className="text-text-muted font-mono text-[0.6rem] mb-4">
+            Organizations I contribute to
+          </p>
+          <div className="org-grid">
+            {hero.orgs.map((org, i) => (
+              <motion.a
+                key={org.login}
+                href={`https://github.com/${org.login}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${org.login} on GitHub`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: 0.55 + i * 0.06 }}
+                className="org-card"
+              >
+                <img
+                  src={org.avatar}
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="org-avatar"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="org-meta">
+                  <span className="org-name">{org.login}</span>
+                  <span className="org-description">{org.description}</span>
+                </div>
+                <svg
+                  className="org-arrow"
+                  width={14}
+                  height={14}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M7 17l9.2-9.2M17 17V7H7" />
+                </svg>
+              </motion.a>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
