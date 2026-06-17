@@ -12,7 +12,7 @@ function Hero() {
     { label: 'commits', value: commitsDisplay ?? hero.stats[2].value },
   ]
   return (
-    <section id="hero" className="relative min-h-screen flex items-center pt-24 pb-16 md:pt-0 md:pb-0">
+    <section id="hero" className="relative min-h-screen flex items-center pt-24 pb-16 md:pt-20 md:pb-0">
       <div className="section-container relative z-10 w-full py-12 md:py-32">
         <div className="hero-layout">
           <motion.div
