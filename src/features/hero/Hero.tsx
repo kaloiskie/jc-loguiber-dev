@@ -12,8 +12,8 @@ function Hero() {
     { label: 'commits', value: commitsDisplay ?? hero.stats[2].value },
   ]
   return (
-    <section id="hero" className="relative min-h-screen flex items-center">
-      <div className="section-container relative z-10 w-full py-32">
+    <section id="hero" className="relative min-h-screen flex items-start md:items-center pt-16 pb-16 md:pt-0 md:pb-0">
+      <div className="section-container relative z-10 w-full py-12 md:py-32">
         <div className="hero-layout">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
