@@ -4,6 +4,8 @@ export interface Project {
   tech: string[]
   status: 'Production' | 'Active' | 'Internal'
   highlights: string[]
+  url?: string
+  github?: string
 }
 
 export interface Section {

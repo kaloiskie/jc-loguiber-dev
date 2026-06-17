@@ -51,6 +51,31 @@ function Projects() {
                   {proj.description}
                 </p>
 
+                {(proj.url || proj.github) && (
+                  <div className="flex flex-wrap gap-3 mb-3">
+                    {proj.url && (
+                      <a
+                        href={proj.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-[11px] px-2 py-0.5 text-accent border border-accent/20 bg-accent/5 hover:bg-accent/10 transition-colors"
+                      >
+                        Live Site ↗
+                      </a>
+                    )}
+                    {proj.github && (
+                      <a
+                        href={proj.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-[11px] px-2 py-0.5 text-text-muted border border-border-light hover:border-accent hover:text-accent transition-colors"
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
+                  </div>
+                )}
+
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {proj.tech.map((t) => (
                     <span
