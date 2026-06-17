@@ -1,8 +1,16 @@
 import { motion } from 'framer-motion'
 import { FaGithub, FaLinkedinIn, FaEnvelope } from 'react-icons/fa'
 import { hero } from './hero.data'
+import { useGitHubStats } from './useGitHubStats'
 
 function Hero() {
+  const { yearsExp, reposDisplay, commitsDisplay } = useGitHubStats()
+
+  const stats = [
+    { label: 'years experience', value: yearsExp },
+    { label: 'repositories', value: reposDisplay ?? hero.stats[1].value },
+    { label: 'commits', value: commitsDisplay ?? hero.stats[2].value },
+  ]
   return (
     <section id="hero" className="relative min-h-screen flex items-center">
       <div className="section-container relative z-10 w-full py-32">
@@ -96,7 +104,7 @@ function Hero() {
           transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
           className="hero-stats"
         >
-          {hero.stats.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="hero-stat">
               <span className="hero-stat-value">{stat.value}</span>
               <span className="hero-stat-label">{stat.label}</span>
