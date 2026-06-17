@@ -43,7 +43,7 @@ function Hero() {
     <section id="hero" className="relative min-h-screen flex items-center">
       <div className="absolute inset-0 hero-gradient" />
 
-      <div className="section-container relative z-10 w-full py-24">
+      <div className="section-container relative z-10 w-full py-32">
         <div className="max-w-3xl">
           <motion.div
             initial={{ opacity: 0 }}

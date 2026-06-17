@@ -89,7 +89,7 @@ function App() {
             </button>
 
             <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-0">
+              <NavigationMenuList className="gap-1">
                 {navSections.map((section) => (
                   <NavigationMenuItem key={section.id}>
                     <NavigationMenuLink

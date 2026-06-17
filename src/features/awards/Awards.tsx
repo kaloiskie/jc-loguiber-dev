@@ -7,7 +7,7 @@ function Awards() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <section id="awards" className="py-24">
+    <section id="awards" className="py-32">
       <div className="section-container">
         <motion.div
           ref={ref}

@@ -6,7 +6,7 @@ function TechStack() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="tech-stack" className="py-24">
+    <section id="tech-stack" className="py-32">
       <div className="section-container">
         <motion.div
           ref={ref}

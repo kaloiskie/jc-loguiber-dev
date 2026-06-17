@@ -6,7 +6,7 @@ function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="contact" className="py-24">
+    <section id="contact" className="py-32">
       <div className="section-container">
         <motion.div
           ref={ref}
