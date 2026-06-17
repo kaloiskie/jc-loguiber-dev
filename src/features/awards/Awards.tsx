@@ -1,20 +1,20 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FaTrophy } from 'react-icons/fa'
-import { awards } from '../data/resume'
+import { awards } from './awards.data'
 
 function Awards() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <section id="awards" className="py-24 relative">
+    <section id="awards" className="py-28 relative">
       <div className="section-container relative">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Employment <span className="gradient-text">Recognition</span>

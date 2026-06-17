@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { FaMapMarkerAlt, FaEnvelope, FaPhone, FaChevronDown } from 'react-icons/fa'
-import { hero } from '../data/resume'
+import { hero } from './hero.data'
 
 interface Particle {
   x: number

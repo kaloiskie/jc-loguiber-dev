@@ -1,9 +1,9 @@
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt, FaHeart } from 'react-icons/fa'
-import { hero } from '../data/resume'
+import { hero } from '../hero/hero.data'
 
 function Footer() {
   return (
-    <footer className="relative py-16 border-t border-white/5">
+    <footer className="relative py-20 border-t border-white/5">
       <div className="absolute inset-0 bg-gradient-to-t from-surface-alt/50 to-transparent" />
       <div className="section-container relative">
         <div className="max-w-4xl mx-auto text-center">

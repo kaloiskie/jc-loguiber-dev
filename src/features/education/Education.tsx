@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FaGraduationCap } from 'react-icons/fa'
-import { education } from '../data/resume'
+import { education } from './education.data'
 
 function Education() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="education" className="py-24 relative">
+    <section id="education" className="py-28 relative">
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[128px]" />
       <div className="section-container relative">
         <motion.div
@@ -15,7 +15,7 @@ function Education() {
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Education
@@ -23,7 +23,7 @@ function Education() {
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto" />
         </motion.div>
 
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-8">
           {education.map((edu, i) => (
             <motion.div
               key={i}

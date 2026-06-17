@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { skillCategories } from '../data/resume'
-import type { SkillCategory } from '../data/resume'
+import { skillCategories } from './skills.data'
+import type { SkillCategory } from '../../shared/types'
 
 function SkillCard({ category, index }: { category: SkillCategory; index: number }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
@@ -38,7 +38,7 @@ function Skills() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   return (
-    <section id="skills" className="py-24 relative">
+    <section id="skills" className="py-28 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-surface-alt/30 via-transparent to-surface-alt/30" />
       <div className="section-container relative">
         <motion.div
@@ -46,7 +46,7 @@ function Skills() {
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Skills & <span className="gradient-text">Interests</span>
@@ -57,7 +57,7 @@ function Skills() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {skillCategories.map((cat, i) => (
             <SkillCard key={cat.title} category={cat} index={i} />
           ))}
@@ -67,7 +67,7 @@ function Skills() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="mt-16 glass rounded-2xl p-8 max-w-3xl mx-auto text-center"
+          className="mt-20 glass rounded-2xl p-8 max-w-3xl mx-auto text-center"
         >
           <h3 className="text-xl font-bold mb-3">Personal Interests</h3>
           <p className="text-text-secondary leading-relaxed">

@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FaUsers, FaUserTie } from 'react-icons/fa'
-import { leadership } from '../data/resume'
-import type { LeadershipItem } from '../data/resume'
+import { leadership } from './leadership.data'
+import type { LeadershipItem } from '../../shared/types'
 
 function LeadershipCard({ item, index }: { item: LeadershipItem; index: number }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
@@ -45,7 +45,7 @@ function Leadership() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   return (
-    <section id="leadership" className="py-24 relative">
+    <section id="leadership" className="py-28 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-surface-alt/30 via-transparent to-surface-alt/30" />
       <div className="section-container relative">
         <motion.div
@@ -53,7 +53,7 @@ function Leadership() {
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Leadership & <span className="gradient-text">Organizational</span>
@@ -61,7 +61,7 @@ function Leadership() {
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto" />
         </motion.div>
 
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-4xl mx-auto space-y-5">
           {leadership.map((item, i) => (
             <LeadershipCard key={i} item={item} index={i} />
           ))}
