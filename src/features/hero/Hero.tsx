@@ -49,9 +49,22 @@ function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="mb-16"
+            className="mb-8"
           >
             <PhtClock />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="mb-8"
+          >
+            <img
+              src="/profilepicture.jpg"
+              alt="JC Loguiber"
+              className="w-28 h-28 rounded-full object-cover border-2 border-border-light"
+            />
           </motion.div>
 
           <motion.h1
