@@ -30,6 +30,7 @@ interface Repo {
   id: number
   name: string
   owner: { login: string }
+  private: boolean
   description: string | null
   html_url: string
   stargazers_count: number
@@ -173,15 +174,17 @@ export default function GitHub() {
             {repos.map(repo => (
               <a
                 key={repo.id}
-                href={repo.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-bg-overlay border border-border rounded-md p-4 hover:border-accent/40 transition-colors duration-200 flex flex-col gap-2"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <p className="text-sm font-medium text-text group-hover:text-accent transition-colors duration-200 truncate">
-                    {repo.name}
-                  </p>
+                    href={repo.private ? undefined : repo.html_url}
+                    target={repo.private ? undefined : '_blank'}
+                    rel={repo.private ? undefined : 'noopener noreferrer'}
+                    onClick={repo.private ? (e) => e.preventDefault() : undefined}
+                    className={`group bg-bg-overlay border border-border rounded-md p-4 transition-colors duration-200 flex flex-col gap-2 ${repo.private ? 'cursor-default opacity-75' : 'hover:border-accent/40'}`}
+                    >
+                    <div className="flex items-start justify-between gap-2">
+                        <p className={`text-sm font-medium truncate transition-colors duration-200 ${repo.private ? 'text-text-dim' : 'text-text group-hover:text-accent'}`}>
+                        {repo.name}
+                        {repo.private && <span className="ml-2 text-[10px] bg-border text-text-dim px-1.5 py-0.5 rounded-sm align-middle">private</span>}
+                        </p>
                   <div className="flex items-center gap-3 shrink-0 text-text-dim text-xs">
                     <span className="flex items-center gap-1">
                       <FaStar size={11} /> {repo.stargazers_count}
