@@ -7,6 +7,7 @@ import { About } from './features/objective'
 import { TechStack } from './features/skills'
 import { Experience } from './features/experience'
 import { Projects } from './features/projects'
+import { GitHub } from './features/github'
 import { Education } from './features/education'
 import { Awards } from './features/awards'
 import { Contact } from './features/footer'
@@ -203,6 +204,7 @@ function App() {
         <TechStack />
         <Experience />
         <Projects />
+        <GitHub />
         <Education />
         <Awards />
       </main>
