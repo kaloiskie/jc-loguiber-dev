@@ -90,29 +90,37 @@ export function useGitHubStats() {
               })
             : Promise.resolve(null),
           token
-            ? fetch(`https://api.github.com/user/repos?per_page=1&affiliation=owner,collaborator`, { headers })
+            ? fetch(`https://api.github.com/search/commits?q=author:kaloiskie&per_page=100`, {
+                headers: { ...headers, Accept: 'application/vnd.github.cloak-preview+json' },
+              })
             : Promise.resolve(null),
           tokenNGC
-            ? fetch(`https://api.github.com/user/repos?per_page=1&affiliation=owner,collaborator`, { headers: ngcHeaders })
+            ? fetch(`https://api.github.com/search/commits?q=author:northmangamingcorporation-dot&per_page=100`, {
+                headers: { ...ngcHeaders, Accept: 'application/vnd.github.cloak-preview+json' },
+              })
             : Promise.resolve(null),
         ])
 
         let fetchedRepos = 0
         let fetchedCommits = 0
 
-        function parseLastPage(linkHeader: string | null): number {
-          if (!linkHeader) return 1
-          const match = linkHeader.match(/&page=(\d+)>; rel="last"/)
-          return match ? parseInt(match[1], 10) : 1
-        }
+        const repoSet = new Set<string>()
 
         if (!cancelled && repoRes && repoRes.ok) {
-          fetchedRepos += parseLastPage(repoRes.headers.get('Link'))
+          const data = await repoRes.json()
+          if (Array.isArray(data.items)) {
+            data.items.forEach((c: any) => repoSet.add(c.repository?.full_name))
+          }
         }
 
         if (!cancelled && repoNGCRes && repoNGCRes.ok) {
-          fetchedRepos += parseLastPage(repoNGCRes.headers.get('Link'))
+          const data = await repoNGCRes.json()
+          if (Array.isArray(data.items)) {
+            data.items.forEach((c: any) => repoSet.add(c.repository?.full_name))
+          }
         }
+
+        fetchedRepos = repoSet.size
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
