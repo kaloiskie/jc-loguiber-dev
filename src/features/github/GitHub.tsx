@@ -77,8 +77,8 @@ export default function GitHub() {
             })
             .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
 
-            const publicRepos = allRepos.filter((repo: any) => !repo.private).slice(0, 6)
-            setRepos(publicRepos as Repo[])
+            const topRepos = allRepos
+            setRepos(topRepos as Repo[])
 
             const langTotals: Record<string, number> = {}
             await Promise.all(

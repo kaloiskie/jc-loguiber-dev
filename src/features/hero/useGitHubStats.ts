@@ -90,10 +90,10 @@ export function useGitHubStats() {
               })
             : Promise.resolve(null),
           token
-            ? fetch(`https://api.github.com/search/repositories?q=is:public+is:private+involves:kaloiskie&per_page=1`, { headers })
+            ? fetch(`https://api.github.com/user/repos?per_page=100&visibility=all&affiliation=owner,collaborator`, { headers })
             : Promise.resolve(null),
           tokenNGC
-            ? fetch(`https://api.github.com/search/repositories?q=involves:northmangamingcorporation-dot&per_page=1`, { headers: ngcHeaders })
+            ? fetch(`https://api.github.com/user/repos?per_page=100&visibility=all&affiliation=owner,collaborator`, { headers: ngcHeaders })
             : Promise.resolve(null),
         ])
 
@@ -102,12 +102,12 @@ export function useGitHubStats() {
 
         if (!cancelled && repoRes && repoRes.ok) {
           const data = await repoRes.json()
-          fetchedRepos += data.total_count ?? 0
+          fetchedRepos += Array.isArray(data) ? data.length : 0
         }
 
         if (!cancelled && repoNGCRes && repoNGCRes.ok) {
           const data = await repoNGCRes.json()
-          fetchedRepos += data.total_count ?? 0
+          fetchedRepos += Array.isArray(data) ? data.length : 0
         }
 
         if (!cancelled && commitRes && commitRes.ok) {
@@ -134,6 +134,8 @@ export function useGitHubStats() {
             ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers: ngcHeaders }).then(r => r.json())
             : Promise.resolve([]),
         ])
+
+        console.log('orgs1:', orgs1, 'orgs2:', orgs2)
 
         if (!cancelled) {
           const fetchedOrgs: Array<{ login: string; avatar_url: string; description: string }> = [
