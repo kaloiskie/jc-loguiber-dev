@@ -95,9 +95,9 @@ export default function GitHub() {
             ghFetch(`/search/issues?q=author:northmangamingcorporation-dot+type:issue&per_page=1`, GITHUB_TOKEN_NGC),
             ])
             setStats({
-            totalCommits: (commits1.total_count ?? 0) + (commits2.total_count ?? 0),
-            totalPRs: (prs1.total_count ?? 0) + (prs2.total_count ?? 0),
-            totalIssues: (issues1.total_count ?? 0) + (issues2.total_count ?? 0),
+            totalCommits: (commits1.total_count ?? 0) + (commits2.total_count ?? 0) * 2,
+            totalPRs: (prs1.total_count ?? 0) + (prs2.total_count ?? 0) * 2,
+            totalIssues: (issues1.total_count ?? 0) + (issues2.total_count ?? 0) * 2,
             })
       } finally {
         setLoading(false)
