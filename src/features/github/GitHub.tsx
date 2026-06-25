@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { FaStar, FaCodeFork, FaCircle } from 'react-icons/fa6'
 
-const GITHUB_USERNAME = 'kaloiskie'
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
+const GITHUB_TOKEN_NGC = import.meta.env.VITE_GITHUB_TOKEN_NGC
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript: '#3178c6',
@@ -17,10 +17,10 @@ const LANG_COLORS: Record<string, string> = {
   'C++': '#f34b7d',
 }
 
-function ghFetch(path: string) {
+function ghFetch(path: string, token = GITHUB_TOKEN) {
   return fetch(`https://api.github.com${path}`, {
     headers: {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.github+json',
     },
   }).then(r => r.json())
@@ -29,6 +29,7 @@ function ghFetch(path: string) {
 interface Repo {
   id: number
   name: string
+  owner: { login: string }
   description: string | null
   html_url: string
   stargazers_count: number
@@ -53,36 +54,51 @@ export default function GitHub() {
   useEffect(() => {
     async function load() {
       try {
-        const repoData = await ghFetch(
-        `/user/repos?sort=pushed&per_page=6&visibility=all&affiliation=owner`
-        )
-        if (!Array.isArray(repoData)) {
-        console.error('GitHub repos fetch failed:', repoData)
-        return
-        }
-        setRepos(repoData as Repo[])
-
-        const langTotals: Record<string, number> = {}
-        await Promise.all(
-          repoData.map(async repo => {
-            const langs = await ghFetch(`/repos/${GITHUB_USERNAME}/${repo.name}/languages`)
-            for (const [lang, bytes] of Object.entries(langs as Record<string, number>)) {
-              langTotals[lang] = (langTotals[lang] ?? 0) + bytes
-            }
-          })
-        )
-        setLangMap(langTotals)
-
-        const [commits, prs, issues] = await Promise.all([
-          ghFetch(`/search/commits?q=author:${GITHUB_USERNAME}&per_page=1`),
-          ghFetch(`/search/issues?q=author:${GITHUB_USERNAME}+type:pr&per_page=1`),
-          ghFetch(`/search/issues?q=author:${GITHUB_USERNAME}+type:issue&per_page=1`),
+        const [personalRepos, ngcRepos] = await Promise.all([
+        ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,organization_member`, GITHUB_TOKEN),
+        ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,organization_member`, GITHUB_TOKEN_NGC),
         ])
-        setStats({
-          totalCommits: commits.total_count ?? 0,
-          totalPRs: prs.total_count ?? 0,
-          totalIssues: issues.total_count ?? 0,
-        })
+
+            if (!Array.isArray(personalRepos)) {
+            console.error('GitHub repos fetch failed:', personalRepos)
+            return
+            }
+
+            const allRepos = [
+            ...(Array.isArray(personalRepos) ? personalRepos : []),
+            ...(Array.isArray(ngcRepos) ? ngcRepos : []),
+            ]
+            .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
+            .slice(0, 6)
+
+            setRepos(allRepos as Repo[])
+
+            const langTotals: Record<string, number> = {}
+            await Promise.all(
+            allRepos.map(async repo => {
+                const token = repo.owner.login === 'kaloiskie' ? GITHUB_TOKEN : GITHUB_TOKEN_NGC
+                const langs = await ghFetch(`/repos/${repo.owner.login}/${repo.name}/languages`, token)
+                if (typeof langs !== 'object' || Array.isArray(langs) || langs === null) return
+                for (const [lang, bytes] of Object.entries(langs as Record<string, number>)) {
+                langTotals[lang] = (langTotals[lang] ?? 0) + bytes
+                }
+            })
+            )
+            setLangMap(langTotals)
+
+            const [commits1, prs1, issues1, commits2, prs2, issues2] = await Promise.all([
+            ghFetch(`/search/commits?q=author:kaloiskie&per_page=1`, GITHUB_TOKEN),
+            ghFetch(`/search/issues?q=author:kaloiskie+type:pr&per_page=1`, GITHUB_TOKEN),
+            ghFetch(`/search/issues?q=author:kaloiskie+type:issue&per_page=1`, GITHUB_TOKEN),
+            ghFetch(`/search/commits?q=author:northmangamingcorporation-dot&per_page=1`, GITHUB_TOKEN_NGC),
+            ghFetch(`/search/issues?q=author:northmangamingcorporation-dot+type:pr&per_page=1`, GITHUB_TOKEN_NGC),
+            ghFetch(`/search/issues?q=author:northmangamingcorporation-dot+type:issue&per_page=1`, GITHUB_TOKEN_NGC),
+            ])
+            setStats({
+            totalCommits: (commits1.total_count ?? 0) + (commits2.total_count ?? 0),
+            totalPRs: (prs1.total_count ?? 0) + (prs2.total_count ?? 0),
+            totalIssues: (issues1.total_count ?? 0) + (issues2.total_count ?? 0),
+            })
       } finally {
         setLoading(false)
       }
