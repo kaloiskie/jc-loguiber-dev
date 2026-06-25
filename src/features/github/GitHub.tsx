@@ -55,9 +55,9 @@ export default function GitHub() {
     async function load() {
       try {
         const [personalRepos, ngcRepos] = await Promise.all([
-        ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,organization_member`, GITHUB_TOKEN),
-        ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,organization_member`, GITHUB_TOKEN_NGC),
-        ])
+            ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN),
+            ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN_NGC),
+            ])
 
             if (!Array.isArray(personalRepos)) {
             console.error('GitHub repos fetch failed:', personalRepos)
