@@ -54,7 +54,7 @@ export default function GitHub() {
     async function load() {
       try {
         const repoData = await ghFetch(
-        `/user/repos?sort=pushed&per_page=6&type=all&affiliation=owner`
+        `/user/repos?sort=pushed&per_page=6&visibility=all&affiliation=owner`
         )
         if (!Array.isArray(repoData)) {
         console.error('GitHub repos fetch failed:', repoData)
