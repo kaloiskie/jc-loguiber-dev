@@ -90,14 +90,10 @@ export function useGitHubStats() {
               })
             : Promise.resolve(null),
           token
-            ? fetch(`https://api.github.com/search/repositories?q=is:public+contributor:kaloiskie&per_page=1`, {
-                headers,
-              })
+            ? fetch(`https://api.github.com/user/repos?per_page=1&affiliation=owner,collaborator,organization_member`, { headers })
             : Promise.resolve(null),
           tokenNGC
-            ? fetch(`https://api.github.com/search/repositories?q=contributor:northmangamingcorporation-dot&per_page=1`, {
-                headers: ngcHeaders,
-              })
+            ? fetch(`https://api.github.com/user/repos?per_page=1&affiliation=owner,collaborator,organization_member`, { headers: ngcHeaders })
             : Promise.resolve(null),
         ])
 
