@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { FaStar, FaCodeFork, FaCircle } from 'react-icons/fa6'
 
-const GITHUB_USERNAME = 'kaloy' // ← your GitHub username
+const GITHUB_USERNAME = 'kaloiskie'
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
 
 const LANG_COLORS: Record<string, string> = {
