@@ -9,7 +9,18 @@ interface CacheEntry {
 const CACHE_KEY = 'gh_stats'
 const CACHE_TTL = 3600000
 const CAREER_START = new Date('2022-01-01')
-const GITHUB_USERNAME = 'kaloiskie'
+
+export interface OrgEntry {
+  login: string
+  avatar: string
+  description: string
+}
+
+const HARDCODED_ORGS: OrgEntry[] = [
+  { login: 'Incredible-Gaming-Inc', avatar: '/Incredible.jpg', description: 'secure and scalable digital systems' },
+  { login: 'Sinbad-Studios', avatar: '/Sinbad.jpg', description: 'skill-based competitive games' },
+  { login: 'Northman-Gaming-Dev', avatar: '/Northman.jpg', description: 'core platform and tooling' },
+]
 
 function getCached(): CacheEntry | null {
   try {
@@ -47,29 +58,39 @@ function formatCount(n: number): string {
 }
 
 export function useGitHubStats() {
-  const cached = getCached()
   const yearsExp = calcYearsExp()
 
-  const [repos, setRepos] = useState<number | null>(cached?.repos ?? null)
-  const [commits, setCommits] = useState<number | null>(cached?.commits ?? null)
-  const [loading, setLoading] = useState(!cached)
+  const [repos, setRepos] = useState<number | null>(() => getCached()?.repos ?? null)
+  const [commits, setCommits] = useState<number | null>(() => getCached()?.commits ?? null)
+  const [orgs, setOrgs] = useState<OrgEntry[]>(HARDCODED_ORGS)
+  const [loading, setLoading] = useState(() => !getCached())
 
   useEffect(() => {
-    if (cached) return
+    if (getCached()) return
 
     let cancelled = false
     const token = import.meta.env.VITE_GITHUB_TOKEN
+    const tokenNGC = import.meta.env.VITE_GITHUB_TOKEN_NGC
 
     async function fetchStats() {
       try {
         const headers: Record<string, string> = { Accept: 'application/vnd.github+json' }
         if (token) headers['Authorization'] = `Bearer ${token}`
 
-        const [userRes, commitRes] = await Promise.all([
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}`, { headers }),
+        const ngcHeaders: Record<string, string> = { Accept: 'application/vnd.github+json' }
+        if (tokenNGC) ngcHeaders['Authorization'] = `Bearer ${tokenNGC}`
+
+        const [userRes, userNGCRes, commitRes, commitNGCRes] = await Promise.all([
+          fetch(`https://api.github.com/users/kaloiskie`, { headers }),
+          fetch(`https://api.github.com/users/northmangamingcorporation-dot`, { headers: ngcHeaders }),
           token
-            ? fetch(`https://api.github.com/search/commits?q=author:${GITHUB_USERNAME}&per_page=1`, {
+            ? fetch(`https://api.github.com/search/commits?q=author:kaloiskie&per_page=1`, {
                 headers: { ...headers, Accept: 'application/vnd.github.cloak-preview+json' },
+              })
+            : Promise.resolve(null),
+          tokenNGC
+            ? fetch(`https://api.github.com/search/commits?q=author:northmangamingcorporation-dot&per_page=1`, {
+                headers: { ...ngcHeaders, Accept: 'application/vnd.github.cloak-preview+json' },
               })
             : Promise.resolve(null),
         ])
@@ -79,14 +100,62 @@ export function useGitHubStats() {
 
         if (!cancelled && userRes.ok) {
           const userData = await userRes.json()
-          fetchedRepos = userData.public_repos ?? 0
-          setRepos(fetchedRepos)
+          fetchedRepos += userData.public_repos ?? 0
         }
+
+        if (!cancelled && userNGCRes.ok) {
+          const userNGCData = await userNGCRes.json()
+          fetchedRepos += userNGCData.public_repos ?? 0
+        }
+
+        setRepos(fetchedRepos)
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
-          fetchedCommits = commitData.total_count ?? 0
-          setCommits(fetchedCommits)
+          fetchedCommits += commitData.total_count ?? 0 
+        }
+
+        if (!cancelled && commitNGCRes && commitNGCRes.ok) {
+          const commitNGCData = await commitNGCRes.json()
+          fetchedCommits += commitNGCData.total_count ?? 0
+        }
+
+        setCommits(fetchedCommits)
+
+        // fetch orgs from both accounts
+        const [orgs1, orgs2] = await Promise.all([
+          token
+            ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers }).then(r => r.json())
+            : Promise.resolve([]),
+          tokenNGC
+            ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers: ngcHeaders }).then(r => r.json())
+            : Promise.resolve([]),
+        ])
+
+        if (!cancelled) {
+          const fetchedOrgs: Array<{ login: string; avatar_url: string; description: string }> = [
+            ...(Array.isArray(orgs1) ? orgs1 : []),
+            ...(Array.isArray(orgs2) ? orgs2 : []),
+          ]
+          // dedupe by login
+          const seen = new Set<string>()
+          const uniqueFetched = fetchedOrgs.filter(o => {
+            if (seen.has(o.login)) return false
+            seen.add(o.login)
+            return true
+          })
+
+          // merge: hardcoded takes priority (preserves custom avatar/description)
+          const hardcodedLogins = new Set(HARDCODED_ORGS.map(o => o.login))
+          const newOrgs = uniqueFetched
+            .filter(o => !hardcodedLogins.has(o.login))
+            .map(o => ({
+              login: o.login,
+              avatar: o.avatar_url,
+              description: o.description ?? '',
+            }))
+
+          setOrgs([...HARDCODED_ORGS, ...newOrgs])
         }
 
         if (!cancelled) {
@@ -107,6 +176,7 @@ export function useGitHubStats() {
     yearsExp,
     reposDisplay: repos !== null ? formatCount(repos) : null,
     commitsDisplay: commits !== null ? formatCount(commits) : null,
+    orgs,
     loading,
   }
 }

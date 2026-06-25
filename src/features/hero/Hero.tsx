@@ -4,7 +4,7 @@ import { hero } from './hero.data'
 import { useGitHubStats } from './useGitHubStats'
 
 function Hero() {
-  const { yearsExp, reposDisplay, commitsDisplay } = useGitHubStats()
+  const { yearsExp, reposDisplay, commitsDisplay, orgs } = useGitHubStats()
 
   const stats = [
     { label: 'years experience', value: yearsExp },
@@ -122,7 +122,7 @@ function Hero() {
             Organizations I contribute to
           </p>
           <div className="org-grid">
-            {hero.orgs.map((org, i) => (
+            {(orgs.length > 0 ? orgs : hero.orgs).map((org, i) => (
               <motion.a
                 key={org.login}
                 href={`https://github.com/${org.login}`}
