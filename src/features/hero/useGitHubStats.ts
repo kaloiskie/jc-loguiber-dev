@@ -78,9 +78,7 @@ export function useGitHubStats() {
         const ngcHeaders: Record<string, string> = { Accept: 'application/vnd.github+json' }
         if (tokenNGC) ngcHeaders['Authorization'] = `Bearer ${tokenNGC}`
 
-        const [userRes, userNGCRes, commitRes, commitNGCRes] = await Promise.all([
-          fetch(`https://api.github.com/user`, { headers }),
-          fetch(`https://api.github.com/user`, { headers: ngcHeaders }),
+        const [commitRes, commitNGCRes, repoRes, repoNGCRes] = await Promise.all([
           token
             ? fetch(`https://api.github.com/search/commits?q=author:kaloiskie&per_page=1`, {
                 headers: { ...headers, Accept: 'application/vnd.github.cloak-preview+json' },
@@ -91,19 +89,29 @@ export function useGitHubStats() {
                 headers: { ...ngcHeaders, Accept: 'application/vnd.github.cloak-preview+json' },
               })
             : Promise.resolve(null),
+          token
+            ? fetch(`https://api.github.com/search/repositories?q=is:public+contributor:kaloiskie&per_page=1`, {
+                headers,
+              })
+            : Promise.resolve(null),
+          tokenNGC
+            ? fetch(`https://api.github.com/search/repositories?q=contributor:northmangamingcorporation-dot&per_page=1`, {
+                headers: ngcHeaders,
+              })
+            : Promise.resolve(null),
         ])
 
         let fetchedRepos = 0
         let fetchedCommits = 0
 
-        if (!cancelled && userRes.ok) {
-          const userData = await userRes.json()
-          fetchedRepos += (userData.public_repos ?? 0) + (userData.total_private_repos ?? 0)
+        if (!cancelled && repoRes && repoRes.ok) {
+          const repoData = await repoRes.json()
+          fetchedRepos += repoData.total_count ?? 0
         }
 
-        if (!cancelled && userNGCRes.ok) {
-          const userNGCData = await userNGCRes.json()
-          fetchedRepos += (userNGCData.public_repos ?? 0) + (userNGCData.total_private_repos ?? 0)
+        if (!cancelled && repoNGCRes && repoNGCRes.ok) {
+          const repoNGCData = await repoNGCRes.json()
+          fetchedRepos += repoNGCData.total_count ?? 0
         }
 
         if (!cancelled) setRepos(fetchedRepos)
