@@ -100,29 +100,34 @@ export function useGitHubStats() {
         let fetchedRepos = 0
         let fetchedCommits = 0
 
+        function parseLastPage(linkHeader: string | null): number {
+          if (!linkHeader) return 1
+          const match = linkHeader.match(/&page=(\d+)>; rel="last"/)
+          return match ? parseInt(match[1], 10) : 1
+        }
+
         if (!cancelled && repoRes && repoRes.ok) {
-          const repoData = await repoRes.json()
-          fetchedRepos += repoData.total_count ?? 0
+          fetchedRepos += parseLastPage(repoRes.headers.get('Link'))
         }
 
         if (!cancelled && repoNGCRes && repoNGCRes.ok) {
-          const repoNGCData = await repoNGCRes.json()
-          fetchedRepos += repoNGCData.total_count ?? 0
+          fetchedRepos += parseLastPage(repoNGCRes.headers.get('Link'))
         }
-
-        if (!cancelled) setRepos(fetchedRepos)
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
-          fetchedCommits += (commitData.total_count ?? 0 )  * 2
+          fetchedCommits += commitData.total_count ?? 0
         }
 
         if (!cancelled && commitNGCRes && commitNGCRes.ok) {
           const commitNGCData = await commitNGCRes.json()
-          fetchedCommits += (commitNGCData.total_count ?? 0 )  * 2
+          fetchedCommits += commitNGCData.total_count ?? 0
         }
 
-        if (!cancelled) setCommits(fetchedCommits)
+        if (!cancelled) {
+          setRepos(fetchedRepos)
+          setCommits(fetchedCommits)
+        }
 
         // fetch orgs from both accounts
         const [orgs1, orgs2] = await Promise.all([
@@ -159,7 +164,7 @@ export function useGitHubStats() {
             }))
 
           setOrgs([...HARDCODED_ORGS, ...newOrgs])
-          setCache(fetchedRepos || 20, fetchedCommits || 0)
+          setCache(fetchedRepos, fetchedCommits)
         }
       } catch {
         /* use fallbacks */
