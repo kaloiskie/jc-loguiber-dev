@@ -53,10 +53,14 @@ export default function GitHub() {
   useEffect(() => {
     async function load() {
       try {
-        const repoData: Repo[] = await ghFetch(
-          `/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=6&type=public`
+        const repoData = await ghFetch(
+        `/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=6&type=public`
         )
-        setRepos(repoData)
+        if (!Array.isArray(repoData)) {
+        console.error('GitHub repos fetch failed:', repoData)
+        return
+        }
+        setRepos(repoData as Repo[])
 
         const langTotals: Record<string, number> = {}
         await Promise.all(
