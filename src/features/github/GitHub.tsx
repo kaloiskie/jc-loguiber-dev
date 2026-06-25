@@ -178,13 +178,19 @@ export default function GitHub() {
                     target={repo.private ? undefined : '_blank'}
                     rel={repo.private ? undefined : 'noopener noreferrer'}
                     onClick={repo.private ? (e) => e.preventDefault() : undefined}
-                    className={`group bg-bg-overlay border border-border rounded-md p-4 transition-colors duration-200 flex flex-col gap-2 ${repo.private ? 'cursor-default opacity-75' : 'hover:border-accent/40'}`}
+                    className={`group bg-bg-overlay border border-border rounded-md p-4 transition-colors duration-200 flex flex-col gap-2 ${repo.private ? 'cursor-default' : 'hover:border-accent/40'}`}
                     >
                     <div className="flex items-start justify-between gap-2">
+                       <div className="flex items-center gap-2 min-w-0">
                         <p className={`text-sm font-medium truncate transition-colors duration-200 ${repo.private ? 'text-text-dim' : 'text-text group-hover:text-accent'}`}>
-                        {repo.name}
-                        {repo.private && <span className="ml-2 text-[10px] bg-border text-text-dim px-1.5 py-0.5 rounded-sm align-middle">private</span>}
+                            {repo.name}
                         </p>
+                        {repo.private && (
+                            <span className="shrink-0 text-[10px] bg-border text-text-dim px-1.5 py-0.5 rounded-sm">
+                            private
+                            </span>
+                        )}
+                        </div>
                   <div className="flex items-center gap-3 shrink-0 text-text-dim text-xs">
                     <span className="flex items-center gap-1">
                       <FaStar size={11} /> {repo.stargazers_count}
