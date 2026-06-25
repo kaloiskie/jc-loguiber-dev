@@ -56,8 +56,8 @@ export default function GitHub() {
     async function load() {
       try {
         const [personalRepos, ngcRepos] = await Promise.all([
-            ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN),
-            ghFetch(`/user/repos?sort=pushed&per_page=50&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN_NGC),
+            ghFetch(`/user/repos?sort=pushed&per_page=100&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN),
+            ghFetch(`/user/repos?sort=pushed&per_page=100&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN_NGC),
             ])
 
             if (!Array.isArray(personalRepos)) {
@@ -65,14 +65,20 @@ export default function GitHub() {
             return
             }
 
+            const seen = new Set<number>()
             const allRepos = [
             ...(Array.isArray(personalRepos) ? personalRepos : []),
             ...(Array.isArray(ngcRepos) ? ngcRepos : []),
             ]
+            .filter(repo => {
+                if (seen.has(repo.id)) return false
+                seen.add(repo.id)
+                return true
+            })
             .sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
-            .slice(0, 6)
 
-            setRepos(allRepos as Repo[])
+            const publicRepos = allRepos.filter((repo: any) => !repo.private).slice(0, 6)
+            setRepos(publicRepos as Repo[])
 
             const langTotals: Record<string, number> = {}
             await Promise.all(

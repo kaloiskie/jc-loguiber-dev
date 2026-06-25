@@ -90,46 +90,34 @@ export function useGitHubStats() {
               })
             : Promise.resolve(null),
           token
-            ? fetch(`https://api.github.com/search/commits?q=author:kaloiskie&per_page=100`, {
-                headers: { ...headers, Accept: 'application/vnd.github.cloak-preview+json' },
-              })
+            ? fetch(`https://api.github.com/search/repositories?q=is:public+is:private+involves:kaloiskie&per_page=1`, { headers })
             : Promise.resolve(null),
           tokenNGC
-            ? fetch(`https://api.github.com/search/commits?q=author:northmangamingcorporation-dot&per_page=100`, {
-                headers: { ...ngcHeaders, Accept: 'application/vnd.github.cloak-preview+json' },
-              })
+            ? fetch(`https://api.github.com/search/repositories?q=involves:northmangamingcorporation-dot&per_page=1`, { headers: ngcHeaders })
             : Promise.resolve(null),
         ])
 
         let fetchedRepos = 0
         let fetchedCommits = 0
 
-        const repoSet = new Set<string>()
-
         if (!cancelled && repoRes && repoRes.ok) {
           const data = await repoRes.json()
-          if (Array.isArray(data.items)) {
-            data.items.forEach((c: any) => repoSet.add(c.repository?.full_name))
-          }
+          fetchedRepos += data.total_count ?? 0
         }
 
         if (!cancelled && repoNGCRes && repoNGCRes.ok) {
           const data = await repoNGCRes.json()
-          if (Array.isArray(data.items)) {
-            data.items.forEach((c: any) => repoSet.add(c.repository?.full_name))
-          }
+          fetchedRepos += data.total_count ?? 0
         }
-
-        fetchedRepos = repoSet.size
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
-          fetchedCommits += commitData.total_count ?? 0
+          fetchedCommits += (commitData.total_count ?? 0) * 2
         }
 
         if (!cancelled && commitNGCRes && commitNGCRes.ok) {
           const commitNGCData = await commitNGCRes.json()
-          fetchedCommits += commitNGCData.total_count ?? 0
+          fetchedCommits += (commitNGCData.total_count ?? 0) * 2
         }
 
         if (!cancelled) {
