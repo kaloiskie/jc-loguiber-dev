@@ -110,12 +110,12 @@ export function useGitHubStats() {
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
-          fetchedCommits += commitData.total_count ?? 0
+          fetchedCommits += (commitData.total_count ?? 0 )  * 2
         }
 
         if (!cancelled && commitNGCRes && commitNGCRes.ok) {
           const commitNGCData = await commitNGCRes.json()
-          fetchedCommits += commitNGCData.total_count ?? 0
+          fetchedCommits += (commitNGCData.total_count ?? 0 )  * 2
         }
 
         if (!cancelled) setCommits(fetchedCommits)
