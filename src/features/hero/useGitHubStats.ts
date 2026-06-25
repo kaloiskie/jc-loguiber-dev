@@ -66,8 +66,6 @@ export function useGitHubStats() {
   const [loading, setLoading] = useState(() => !getCached())
 
   useEffect(() => {
-    if (getCached()) return
-
     let cancelled = false
     const token = import.meta.env.VITE_GITHUB_TOKEN
     const tokenNGC = import.meta.env.VITE_GITHUB_TOKEN_NGC
@@ -81,8 +79,8 @@ export function useGitHubStats() {
         if (tokenNGC) ngcHeaders['Authorization'] = `Bearer ${tokenNGC}`
 
         const [userRes, userNGCRes, commitRes, commitNGCRes] = await Promise.all([
-          fetch(`https://api.github.com/users/kaloiskie`, { headers }),
-          fetch(`https://api.github.com/users/northmangamingcorporation-dot`, { headers: ngcHeaders }),
+          fetch(`https://api.github.com/user`, { headers }),
+          fetch(`https://api.github.com/user`, { headers: ngcHeaders }),
           token
             ? fetch(`https://api.github.com/search/commits?q=author:kaloiskie&per_page=1`, {
                 headers: { ...headers, Accept: 'application/vnd.github.cloak-preview+json' },
@@ -100,19 +98,19 @@ export function useGitHubStats() {
 
         if (!cancelled && userRes.ok) {
           const userData = await userRes.json()
-          fetchedRepos += userData.public_repos ?? 0
+          fetchedRepos += (userData.public_repos ?? 0) + (userData.total_private_repos ?? 0)
         }
 
         if (!cancelled && userNGCRes.ok) {
           const userNGCData = await userNGCRes.json()
-          fetchedRepos += userNGCData.public_repos ?? 0
+          fetchedRepos += (userNGCData.public_repos ?? 0) + (userNGCData.total_private_repos ?? 0)
         }
 
-        setRepos(fetchedRepos)
+        if (!cancelled) setRepos(fetchedRepos)
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
-          fetchedCommits += commitData.total_count ?? 0 
+          fetchedCommits += commitData.total_count ?? 0
         }
 
         if (!cancelled && commitNGCRes && commitNGCRes.ok) {
@@ -120,7 +118,7 @@ export function useGitHubStats() {
           fetchedCommits += commitNGCData.total_count ?? 0
         }
 
-        setCommits(fetchedCommits)
+        if (!cancelled) setCommits(fetchedCommits)
 
         // fetch orgs from both accounts
         const [orgs1, orgs2] = await Promise.all([
@@ -137,6 +135,7 @@ export function useGitHubStats() {
             ...(Array.isArray(orgs1) ? orgs1 : []),
             ...(Array.isArray(orgs2) ? orgs2 : []),
           ]
+
           // dedupe by login
           const seen = new Set<string>()
           const uniqueFetched = fetchedOrgs.filter(o => {
@@ -156,9 +155,6 @@ export function useGitHubStats() {
             }))
 
           setOrgs([...HARDCODED_ORGS, ...newOrgs])
-        }
-
-        if (!cancelled) {
           setCache(fetchedRepos || 20, fetchedCommits || 0)
         }
       } catch {
