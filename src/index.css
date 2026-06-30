@@ -374,3 +374,25 @@ body {
 .org-card:hover .org-arrow {
   opacity: 1;
 }
+
+.project-image-wrapper {
+  position: relative;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-border);
+}
+
+.project-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  transition: opacity 0.3s ease;
+}
+
+.project-image-wrapper:hover .project-image {
+  opacity: 0.85;
+}

@@ -7,6 +7,7 @@ export const projects: Project[] = [
       'Full-stack real-time gaming operations platform for a PCSO-licensed STL operator. Handles ticket verification, multi-role approval chains, live sales data, and async queue processing.',
     tech: ['React', 'Vite', 'Node.js', 'Express', 'PostgreSQL', 'Socket.io', 'SQS'],
     status: 'Production',
+    image: '/websites/northmangaming%20operation%20dashboard.png',
     highlights: [
       'Multi-role approval workflow with role-based access control',
       'Real-time sales dashboard with Socket.io and auto-reconnection',

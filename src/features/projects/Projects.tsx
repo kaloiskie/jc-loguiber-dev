@@ -36,6 +36,17 @@ function Projects() {
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
                 className="mb-12"
               >
+                {proj.image && (
+                  <div className="project-image-wrapper mb-5">
+                    <img
+                      src={proj.image}
+                      alt={`${proj.title} screenshot`}
+                      className="project-image"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h3 className="font-display text-xl font-semibold text-text">
                     {proj.title}

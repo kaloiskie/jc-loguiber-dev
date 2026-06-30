@@ -6,6 +6,7 @@ export interface Project {
   highlights: string[]
   url?: string
   github?: string[]
+  image?: string
 }
 
 export interface Section {
