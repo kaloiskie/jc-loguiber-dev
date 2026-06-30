@@ -466,23 +466,39 @@ body {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--color-text-muted);
+  text-decoration: none;
   transition: color 0.2s ease;
+}
+
+.magazine-title:hover {
+  color: var(--color-accent);
 }
 
 .magazine-card:hover .magazine-title {
   color: var(--color-text);
 }
 
-.magazine-arrow {
-  color: var(--color-text-muted);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+.magazine-card:hover .magazine-title:hover {
+  color: var(--color-accent);
 }
 
-.magazine-card:hover .magazine-arrow {
+.magazine-arrow-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.magazine-card:hover .magazine-arrow-link {
   opacity: 1;
   transform: translateX(0);
+}
+
+.magazine-arrow-link:hover {
+  color: var(--color-accent);
 }
 
 /* ── Lightbox ── */
@@ -593,4 +609,10 @@ body {
 .lightbox-label {
   color: var(--color-text);
   font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.lightbox-label:hover {
+  color: var(--color-accent);
 }

@@ -10,14 +10,30 @@ const statusColors: Record<string, string> = {
 }
 
 const websiteImages = [
-  { src: '/websites/northmangaming%20operation%20dashboard.png', label: 'Northman Gaming Dashboard' },
-  { src: '/websites/dev-recruitment.png', label: 'Dev Recruitment' },
-  { src: '/websites/hr.dashboard.png', label: 'HR Dashboard' },
-  { src: '/websites/sukirewards.png', label: 'Suki Rewards' },
+  {
+    src: '/websites/northmangaming%20operation%20dashboard.png',
+    label: 'Northman Gaming Dashboard',
+    url: 'https://northmangaming.com/',
+  },
+  {
+    src: '/websites/dev-recruitment.png',
+    label: 'Dev Recruitment',
+    url: 'https://dev-recruitment-five.vercel.app/admin/login',
+  },
+  {
+    src: '/websites/hr.dashboard.png',
+    label: 'HR Dashboard',
+    url: 'https://hr.northmangaming.com/',
+  },
+  {
+    src: '/websites/sukirewards.png',
+    label: 'Suki Rewards',
+    url: 'https://sukirewards.proofconcept.site/',
+  },
 ]
 
 function Lightbox({ images, currentIndex, onClose, onPrev, onNext }: {
-  images: { src: string; label: string }[]
+  images: typeof websiteImages
   currentIndex: number
   onClose: () => void
   onPrev: () => void
@@ -36,6 +52,8 @@ function Lightbox({ images, currentIndex, onClose, onPrev, onNext }: {
       window.removeEventListener('keydown', handleKey)
     }
   }, [onClose, onPrev, onNext])
+
+  const current = images[currentIndex]
 
   return (
     <div className="lightbox-overlay" onClick={onClose}>
@@ -60,15 +78,22 @@ function Lightbox({ images, currentIndex, onClose, onPrev, onNext }: {
 
         <div className="lightbox-image-wrapper">
           <img
-            src={images[currentIndex].src}
-            alt={images[currentIndex].label}
+            src={current.src}
+            alt={current.label}
             className="lightbox-image"
           />
         </div>
 
         <div className="lightbox-caption">
           <span className="lightbox-counter">{currentIndex + 1} / {images.length}</span>
-          <span className="lightbox-label">{images[currentIndex].label}</span>
+          <a
+            href={current.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lightbox-label"
+          >
+            {current.label} ↗
+          </a>
         </div>
       </div>
     </div>
@@ -116,15 +141,18 @@ function Projects() {
           {/* Magazine-style website gallery */}
           <div className="magazine-grid mb-16">
             {websiteImages.map((img, i) => (
-              <motion.button
+              <motion.div
                 key={img.src}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-                onClick={() => openLightbox(i)}
-                className="magazine-card text-left"
+                className="magazine-card"
               >
-                <div className="magazine-image-wrapper">
+                <button
+                  onClick={() => openLightbox(i)}
+                  className="magazine-image-wrapper"
+                  aria-label={`View ${img.label}`}
+                >
                   <img
                     src={img.src}
                     alt={img.label}
@@ -134,14 +162,29 @@ function Projects() {
                   <div className="magazine-overlay">
                     <span className="magazine-view-label">View</span>
                   </div>
-                </div>
+                </button>
                 <div className="magazine-caption">
-                  <span className="magazine-title">{img.label}</span>
-                  <svg className="magazine-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  <a
+                    href={img.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="magazine-title"
+                  >
+                    {img.label}
+                  </a>
+                  <a
+                    href={img.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="magazine-arrow-link"
+                    aria-label={`Open ${img.label}`}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </a>
                 </div>
-              </motion.button>
+              </motion.div>
             ))}
           </div>
 
