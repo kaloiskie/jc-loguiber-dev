@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { FaStar, FaCodeFork, FaCircle } from 'react-icons/fa6'
+import { useState, useEffect, useCallback } from 'react'
+import { FaStar, FaCodeFork, FaCircle, FaXmark } from 'react-icons/fa6'
 
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
 const GITHUB_TOKEN_NGC = import.meta.env.VITE_GITHUB_TOKEN_NGC
@@ -26,6 +26,15 @@ function ghFetch(path: string, token = GITHUB_TOKEN) {
   }).then(r => r.json())
 }
 
+function ghFetchReadme(owner: string, repo: string, token: string) {
+  return fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github.html',
+    },
+  })
+}
+
 interface Repo {
   id: number
   name: string
@@ -46,11 +55,82 @@ interface Stats {
   totalIssues: number
 }
 
+function ReadmeModal({ owner, repo, token, onClose }: {
+  owner: string
+  repo: string
+  token: string
+  onClose: () => void
+}) {
+  const [html, setHtml] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKey)
+
+    ghFetchReadme(owner, repo, token)
+      .then(async (res) => {
+        if (!res.ok) {
+          setError(true)
+          return
+        }
+        setHtml(await res.text())
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false))
+
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [owner, repo, token, onClose])
+
+  return (
+    <div className="readme-overlay" onClick={onClose}>
+      <div className="readme-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="readme-header">
+          <a
+            href={`https://github.com/${owner}/${repo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="readme-repo-link"
+          >
+            {owner}/{repo} ↗
+          </a>
+          <button className="readme-close" onClick={onClose} aria-label="Close">
+            <FaXmark size={18} />
+          </button>
+        </div>
+
+        <div className="readme-body">
+          {loading && (
+            <p className="readme-status">Loading README…</p>
+          )}
+          {error && !loading && (
+            <p className="readme-status">No README found for this repository.</p>
+          )}
+          {html && (
+            <div
+              className="readme-content"
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function GitHub() {
   const [repos, setRepos] = useState<Repo[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
   const [langMap, setLangMap] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
+  const [readmeRepo, setReadmeRepo] = useState<{ owner: string; repo: string; token: string } | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -111,6 +191,15 @@ export default function GitHub() {
       }
     }
     load()
+  }, [])
+
+  const openReadme = useCallback((owner: string, repo: string) => {
+    const token = owner === 'kaloiskie' ? GITHUB_TOKEN : GITHUB_TOKEN_NGC
+    setReadmeRepo({ owner, repo, token })
+  }, [])
+
+  const closeReadme = useCallback(() => {
+    setReadmeRepo(null)
   }, [])
 
   const totalLangBytes = Object.values(langMap).reduce((a, b) => a + b, 0)
@@ -178,25 +267,22 @@ export default function GitHub() {
 
           <div className="grid md:grid-cols-2 gap-4">
             {repos.map(repo => (
-              <a
+              <button
                 key={repo.id}
-                    href={repo.private ? undefined : repo.html_url}
-                    target={repo.private ? undefined : '_blank'}
-                    rel={repo.private ? undefined : 'noopener noreferrer'}
-                    onClick={repo.private ? (e) => e.preventDefault() : undefined}
-                    className={`group bg-bg-overlay border border-border rounded-md p-4 transition-colors duration-200 flex flex-col gap-2 ${repo.private ? 'cursor-default' : 'hover:border-accent/40'}`}
-                    >
-                    <div className="flex items-start justify-between gap-2">
-                       <div className="flex items-center gap-2 min-w-0">
-                        <p className={`text-sm font-medium truncate transition-colors duration-200 ${repo.private ? 'text-text-dim' : 'text-text group-hover:text-accent'}`}>
-                            {repo.name}
-                        </p>
-                        {repo.private && (
-                            <span className="shrink-0 text-[10px] bg-border text-text-dim px-1.5 py-0.5 rounded-sm">
-                            private
-                            </span>
-                        )}
-                        </div>
+                onClick={() => openReadme(repo.owner.login, repo.name)}
+                className="group bg-bg-overlay border border-border rounded-md p-4 transition-colors duration-200 flex flex-col gap-2 text-left w-full hover:border-accent/40 cursor-pointer"
+              >
+                <div className="flex items-start justify-between gap-2">
+                   <div className="flex items-center gap-2 min-w-0">
+                    <p className="text-sm font-medium truncate transition-colors duration-200 text-text group-hover:text-accent">
+                        {repo.name}
+                    </p>
+                    {repo.private && (
+                        <span className="shrink-0 text-[10px] bg-border text-text-dim px-1.5 py-0.5 rounded-sm">
+                        private
+                        </span>
+                    )}
+                    </div>
                   <div className="flex items-center gap-3 shrink-0 text-text-dim text-xs">
                     <span className="flex items-center gap-1">
                       <FaStar size={11} /> {repo.stargazers_count}
@@ -227,11 +313,20 @@ export default function GitHub() {
                     </span>
                   ))}
                 </div>
-              </a>
+              </button>
             ))}
           </div>
 
         </div>
+      )}
+
+      {readmeRepo && (
+        <ReadmeModal
+          owner={readmeRepo.owner}
+          repo={readmeRepo.repo}
+          token={readmeRepo.token}
+          onClose={closeReadme}
+        />
       )}
     </section>
   )
