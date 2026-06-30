@@ -375,24 +375,222 @@ body {
   opacity: 1;
 }
 
-.project-image-wrapper {
-  position: relative;
-  border: 1px solid var(--color-border-light);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--color-border);
+/* ── Magazine-style website gallery ── */
+
+.magazine-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
-.project-image {
+@media (max-width: 640px) {
+  .magazine-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.magazine-card {
+  display: flex;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+.magazine-image-wrapper {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--color-border);
+  aspect-ratio: 16 / 11;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.magazine-card:hover .magazine-image-wrapper {
+  box-shadow: 0 4px 24px rgba(124, 106, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.magazine-image {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 10;
+  height: 100%;
   object-fit: cover;
   object-position: top;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.magazine-card:hover .magazine-image {
+  transform: scale(1.04);
+  filter: brightness(0.6);
+}
+
+.magazine-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.project-image-wrapper:hover .project-image {
-  opacity: 0.85;
+.magazine-card:hover .magazine-overlay {
+  opacity: 1;
+}
+
+.magazine-view-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 6px 18px;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.magazine-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 2px 0;
+}
+
+.magazine-title {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+
+.magazine-card:hover .magazine-title {
+  color: var(--color-text);
+}
+
+.magazine-arrow {
+  color: var(--color-text-muted);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.magazine-card:hover .magazine-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Lightbox ── */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 960px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.lightbox-close:hover {
+  color: #fff;
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 10px 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+  z-index: 10;
+}
+
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.lightbox-prev {
+  left: -56px;
+}
+
+.lightbox-next {
+  right: -56px;
+}
+
+@media (max-width: 768px) {
+  .lightbox-prev {
+    left: 4px;
+  }
+  .lightbox-next {
+    right: 4px;
+  }
+}
+
+.lightbox-image-wrapper {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #0a0a0a;
+}
+
+.lightbox-caption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.lightbox-counter {
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+}
+
+.lightbox-label {
+  color: var(--color-text);
+  font-weight: 500;
 }

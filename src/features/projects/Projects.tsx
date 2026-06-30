@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { projects } from './projects.data'
@@ -8,8 +9,93 @@ const statusColors: Record<string, string> = {
   Internal: 'text-text-muted border-border-light bg-bg',
 }
 
+const websiteImages = [
+  { src: '/websites/northmangaming%20operation%20dashboard.png', label: 'Northman Gaming Dashboard' },
+  { src: '/websites/dev-recruitment.png', label: 'Dev Recruitment' },
+  { src: '/websites/hr.dashboard.png', label: 'HR Dashboard' },
+  { src: '/websites/sukirewards.png', label: 'Suki Rewards' },
+]
+
+function Lightbox({ images, currentIndex, onClose, onPrev, onNext }: {
+  images: { src: string; label: string }[]
+  currentIndex: number
+  onClose: () => void
+  onPrev: () => void
+  onNext: () => void
+}) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') onPrev()
+      if (e.key === 'ArrowRight') onNext()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [onClose, onPrev, onNext])
+
+  return (
+    <div className="lightbox-overlay" onClick={onClose}>
+      <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+        <button className="lightbox-close" onClick={onClose} aria-label="Close gallery">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+
+        <button className="lightbox-nav lightbox-prev" onClick={onPrev} aria-label="Previous image">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+
+        <button className="lightbox-nav lightbox-next" onClick={onNext} aria-label="Next image">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+
+        <div className="lightbox-image-wrapper">
+          <img
+            src={images[currentIndex].src}
+            alt={images[currentIndex].label}
+            className="lightbox-image"
+          />
+        </div>
+
+        <div className="lightbox-caption">
+          <span className="lightbox-counter">{currentIndex + 1} / {images.length}</span>
+          <span className="lightbox-label">{images[currentIndex].label}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function Projects() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index)
+    setLightboxOpen(true)
+  }, [])
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false)
+  }, [])
+
+  const prevImage = useCallback(() => {
+    setLightboxIndex((prev) => (prev === 0 ? websiteImages.length - 1 : prev - 1))
+  }, [])
+
+  const nextImage = useCallback(() => {
+    setLightboxIndex((prev) => (prev === websiteImages.length - 1 ? 0 : prev + 1))
+  }, [])
 
   return (
     <section id="projects" className="py-32">
@@ -27,6 +113,38 @@ function Projects() {
             </h2>
           </div>
 
+          {/* Magazine-style website gallery */}
+          <div className="magazine-grid mb-16">
+            {websiteImages.map((img, i) => (
+              <motion.button
+                key={img.src}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
+                onClick={() => openLightbox(i)}
+                className="magazine-card text-left"
+              >
+                <div className="magazine-image-wrapper">
+                  <img
+                    src={img.src}
+                    alt={img.label}
+                    className="magazine-image"
+                    loading="lazy"
+                  />
+                  <div className="magazine-overlay">
+                    <span className="magazine-view-label">View</span>
+                  </div>
+                </div>
+                <div className="magazine-caption">
+                  <span className="magazine-title">{img.label}</span>
+                  <svg className="magazine-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
           <div className="max-w-3xl">
             {projects.map((proj, i) => (
               <motion.div
@@ -36,17 +154,6 @@ function Projects() {
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
                 className="mb-12"
               >
-                {proj.image && (
-                  <div className="project-image-wrapper mb-5">
-                    <img
-                      src={proj.image}
-                      alt={`${proj.title} screenshot`}
-                      className="project-image"
-                      loading="lazy"
-                    />
-                  </div>
-                )}
-
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h3 className="font-display text-xl font-semibold text-text">
                     {proj.title}
@@ -119,6 +226,16 @@ function Projects() {
           </div>
         </motion.div>
       </div>
+
+      {lightboxOpen && (
+        <Lightbox
+          images={websiteImages}
+          currentIndex={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={prevImage}
+          onNext={nextImage}
+        />
+      )}
     </section>
   )
 }
