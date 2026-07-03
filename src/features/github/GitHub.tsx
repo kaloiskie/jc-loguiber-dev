@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { FaStar, FaCodeFork, FaCircle, FaXmark } from 'react-icons/fa6'
+import { FaStar, FaCodeFork, FaCircle, FaXmark, FaBookOpen } from 'react-icons/fa6'
 
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
 const GITHUB_TOKEN_NGC = import.meta.env.VITE_GITHUB_TOKEN_NGC
@@ -35,6 +35,59 @@ function ghFetchReadme(owner: string, repo: string, token: string) {
   })
 }
 
+function ghFetchReadmeRaw(owner: string, repo: string, token: string) {
+  return fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github.raw',
+    },
+  })
+}
+
+function parseReadme(markdown: string): { title?: string; description?: string } {
+  const lines = markdown.split('\n').map(l => l.trim())
+  let title: string | undefined
+  let i = 0
+
+  for (; i < lines.length; i++) {
+    if (/^#\s+/.test(lines[i])) {
+      title = stripMarkdown(lines[i].replace(/^#\s+/, ''))
+      i++
+      break
+    }
+  }
+
+  let description: string | undefined
+  for (; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line) continue
+    if (/^#{1,6}\s+/.test(line)) continue
+    if (/^<[^>]+>$/.test(line)) continue
+    if (/^\[?!\[/.test(line)) continue
+    if (/^[-*_]{3,}$/.test(line)) continue
+    if (/^\|.*\|$/.test(line)) continue
+    if (/^>+\s*/.test(line) && line.replace(/^>+\s*/, '').length === 0) continue
+
+    const text = stripMarkdown(line)
+    if (text.length > 10) {
+      description = text.length > 160 ? `${text.slice(0, 157)}…` : text
+      break
+    }
+  }
+
+  return { title, description }
+}
+
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\[!\[[^\]]*\]\([^)]*\)\]\([^)]*\)/g, '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`~]{1,3}/g, '')
+    .replace(/^>+\s*/, '')
+    .trim()
+}
+
 interface Repo {
   id: number
   name: string
@@ -53,6 +106,11 @@ interface Stats {
   totalCommits: number
   totalPRs: number
   totalIssues: number
+}
+
+interface ReadmeMeta {
+  title?: string
+  description?: string
 }
 
 function ReadmeModal({ owner, repo, token, onClose }: {
@@ -132,6 +190,7 @@ export default function GitHub() {
   const [loading, setLoading] = useState(true)
   const [readmeRepo, setReadmeRepo] = useState<{ owner: string; repo: string; token: string } | null>(null)
   const [showAll, setShowAll] = useState(false)
+  const [readmeMeta, setReadmeMeta] = useState<Record<number, ReadmeMeta>>({})
 
   useEffect(() => {
     async function load() {
@@ -193,6 +252,39 @@ export default function GitHub() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    if (repos.length === 0) return
+    const visible = showAll ? repos : repos.slice(0, 9)
+    const pending = visible.filter(r => !(r.id in readmeMeta))
+    if (pending.length === 0) return
+
+    let cancelled = false
+    Promise.all(
+      pending.map(async repo => {
+        const token = repo.owner.login === 'kaloiskie' ? GITHUB_TOKEN : GITHUB_TOKEN_NGC
+        try {
+          const res = await ghFetchReadmeRaw(repo.owner.login, repo.name, token)
+          if (!res.ok) return [repo.id, {}] as const
+          const text = await res.text()
+          return [repo.id, parseReadme(text)] as const
+        } catch {
+          return [repo.id, {}] as const
+        }
+      })
+    ).then(results => {
+      if (cancelled) return
+      setReadmeMeta(prev => {
+        const next = { ...prev }
+        for (const [id, meta] of results) next[id] = meta
+        return next
+      })
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [repos, showAll, readmeMeta])
 
   const openReadme = useCallback((owner: string, repo: string) => {
     const token = owner === 'kaloiskie' ? GITHUB_TOKEN : GITHUB_TOKEN_NGC
@@ -271,37 +363,47 @@ export default function GitHub() {
               Repositories
             </p>
             <div className="repo-grid">
-              {(showAll ? repos : repos.slice(0, 9)).map(repo => (
-                <button
-                  key={repo.id}
-                  onClick={() => openReadme(repo.owner.login, repo.name)}
-                  className="repo-card"
-                >
-                  <div className="repo-card-header">
-                    <span className="repo-card-title">{repo.name}</span>
-                    {repo.private && <span className="repo-card-badge">private</span>}
-                  </div>
+              {(showAll ? repos : repos.slice(0, 9)).map(repo => {
+                const meta = readmeMeta[repo.id]
+                const title = meta?.title || repo.name
+                const description = meta?.description || repo.description
 
-                  {repo.description && (
-                    <p className="repo-card-desc">{repo.description}</p>
-                  )}
+                return (
+                  <div key={repo.id} className="repo-card">
+                    <div className="repo-card-header">
+                      <span className="repo-card-title">{title}</span>
+                      {repo.private && <span className="repo-card-badge">private</span>}
+                    </div>
 
-                  <div className="repo-card-footer">
-                    {repo.language && (
-                      <span className="repo-card-stat">
-                        <FaCircle size={7} style={{ color: LANG_COLORS[repo.language] ?? '#888' }} />
-                        {repo.language}
-                      </span>
+                    {description && (
+                      <p className="repo-card-desc">{description}</p>
                     )}
-                    <span className="repo-card-stat">
-                      <FaCodeFork size={11} /> {repo.forks_count}
-                    </span>
-                    <span className="repo-card-stat">
-                      <FaStar size={11} /> {repo.stargazers_count}
-                    </span>
+
+                    <div className="repo-card-footer">
+                      {repo.language && (
+                        <span className="repo-card-stat">
+                          <FaCircle size={7} style={{ color: LANG_COLORS[repo.language] ?? '#888' }} />
+                          {repo.language}
+                        </span>
+                      )}
+                      <span className="repo-card-stat">
+                        <FaCodeFork size={11} /> {repo.forks_count}
+                      </span>
+                      <span className="repo-card-stat">
+                        <FaStar size={11} /> {repo.stargazers_count}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => openReadme(repo.owner.login, repo.name)}
+                      className="repo-card-details-btn"
+                    >
+                      <FaBookOpen size={11} />
+                      Details
+                    </button>
                   </div>
-                </button>
-              ))}
+                )
+              })}
             </div>
 
             {!showAll && repos.length > 9 && (
