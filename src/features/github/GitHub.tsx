@@ -131,6 +131,7 @@ export default function GitHub() {
   const [langMap, setLangMap] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
   const [readmeRepo, setReadmeRepo] = useState<{ owner: string; repo: string; token: string } | null>(null)
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -265,56 +266,54 @@ export default function GitHub() {
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-4">
-            {repos.map(repo => (
-              <button
-                key={repo.id}
-                onClick={() => openReadme(repo.owner.login, repo.name)}
-                className="group bg-bg-overlay border border-border rounded-md p-4 transition-colors duration-200 flex flex-col gap-2 text-left w-full hover:border-accent/40 cursor-pointer"
-              >
-                <div className="flex items-start justify-between gap-2">
-                   <div className="flex items-center gap-2 min-w-0">
-                    <p className="text-sm font-medium truncate transition-colors duration-200 text-text group-hover:text-accent">
-                        {repo.name}
-                    </p>
-                    {repo.private && (
-                        <span className="shrink-0 text-[10px] bg-border text-text-dim px-1.5 py-0.5 rounded-sm">
-                        private
-                        </span>
+          <div>
+            <p className="text-text-muted text-xs font-medium mb-3 uppercase tracking-widest">
+              Repositories
+            </p>
+            <div className="repo-grid">
+              {(showAll ? repos : repos.slice(0, 9)).map(repo => (
+                <button
+                  key={repo.id}
+                  onClick={() => openReadme(repo.owner.login, repo.name)}
+                  className="repo-card"
+                >
+                  <div className="repo-card-header">
+                    <span className="repo-card-title">{repo.name}</span>
+                    {repo.private && <span className="repo-card-badge">private</span>}
+                  </div>
+
+                  {repo.description && (
+                    <p className="repo-card-desc">{repo.description}</p>
+                  )}
+
+                  <div className="repo-card-footer">
+                    {repo.language && (
+                      <span className="repo-card-stat">
+                        <FaCircle size={7} style={{ color: LANG_COLORS[repo.language] ?? '#888' }} />
+                        {repo.language}
+                      </span>
                     )}
-                    </div>
-                  <div className="flex items-center gap-3 shrink-0 text-text-dim text-xs">
-                    <span className="flex items-center gap-1">
-                      <FaStar size={11} /> {repo.stargazers_count}
-                    </span>
-                    <span className="flex items-center gap-1">
+                    <span className="repo-card-stat">
                       <FaCodeFork size={11} /> {repo.forks_count}
                     </span>
+                    <span className="repo-card-stat">
+                      <FaStar size={11} /> {repo.stargazers_count}
+                    </span>
                   </div>
-                </div>
+                </button>
+              ))}
+            </div>
 
-                {repo.description && (
-                  <p className="text-xs text-text-dim line-clamp-2">{repo.description}</p>
-                )}
-
-                <div className="flex items-center gap-3 mt-auto pt-1">
-                  {repo.language && (
-                    <span className="flex items-center gap-1 text-xs text-text-dim">
-                      <FaCircle size={8} style={{ color: LANG_COLORS[repo.language] ?? '#888' }} />
-                      {repo.language}
-                    </span>
-                  )}
-                  {repo.topics.slice(0, 3).map(t => (
-                    <span
-                      key={t}
-                      className="text-[10px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </button>
-            ))}
+            {!showAll && repos.length > 9 && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setShowAll(true)}
+                  className="repo-show-more"
+                >
+                  Show More
+                </button>
+              </div>
+            )}
           </div>
 
         </div>

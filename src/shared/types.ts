@@ -7,6 +7,7 @@ export interface Project {
   url?: string
   github?: string[]
   image?: string
+  accent?: string
 }
 
 export interface Section {
