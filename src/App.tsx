@@ -188,9 +188,6 @@ function App() {
               </PopoverContent>
             </Popover>
 
-            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex text-sm text-text-muted hover:text-text">
-              <a href="mailto:jcarlo.loguiber@gmail.com">Contact</a>
-            </Button>
             <Button asChild size="sm" className="hidden md:inline-flex text-sm">
               <a href="/cv.pdf">Download CV</a>
             </Button>

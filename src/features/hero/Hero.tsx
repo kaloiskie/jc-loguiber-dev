@@ -13,7 +13,7 @@ function Hero() {
   ]
   return (
     <section id="hero" className="relative min-h-screen pt-4 md:pt-0 md:flex md:items-center">
-      <div className="section-container relative z-10 w-full pb-12 md:py-32">
+      <div className="section-container relative z-10 w-full pb-12 md:py-20">
         <div className="hero-layout">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

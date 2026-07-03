@@ -6,7 +6,7 @@ function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="about" className="py-32">
+    <section id="about" className="py-20">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -15,7 +15,7 @@ function About() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="section-label mb-3">01 / About</p>
-          <div className="ruled-line pb-8 mb-12">
+          <div className="ruled-line pb-6 mb-10">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               I build systems that run.
             </h2>

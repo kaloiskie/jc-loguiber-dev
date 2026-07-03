@@ -34,7 +34,7 @@ function Projects() {
   const closeLightbox = useCallback(() => setLightboxSrc(null), [])
 
   return (
-    <section id="projects" className="py-32">
+    <section id="projects" className="py-20">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -43,7 +43,7 @@ function Projects() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="section-label mb-3">04 / Projects</p>
-          <div className="ruled-line pb-8 mb-12">
+          <div className="ruled-line pb-6 mb-10">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               I&apos;ve been building a lot of things.
             </h2>

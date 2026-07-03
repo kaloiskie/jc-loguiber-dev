@@ -304,7 +304,7 @@ export default function GitHub() {
     .slice(0, 6)
 
   return (
-    <section id="github" className="py-32">
+    <section id="github" className="py-20">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -313,7 +313,7 @@ export default function GitHub() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="section-label mb-3">05 / GitHub</p>
-          <div className="ruled-line pb-8 mb-12">
+          <div className="ruled-line pb-6 mb-10">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               Open source activity.
             </h2>
