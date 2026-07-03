@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
 import { FaStar, FaCodeFork, FaCircle, FaXmark, FaBookOpen } from 'react-icons/fa6'
 
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
@@ -191,6 +193,7 @@ export default function GitHub() {
   const [readmeRepo, setReadmeRepo] = useState<{ owner: string; repo: string; token: string } | null>(null)
   const [showAll, setShowAll] = useState(false)
   const [readmeMeta, setReadmeMeta] = useState<Record<number, ReadmeMeta>>({})
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   useEffect(() => {
     async function load() {
@@ -301,125 +304,138 @@ export default function GitHub() {
     .slice(0, 6)
 
   return (
-    <section id="github" className="section-container py-20">
-      <h2 className="font-display text-2xl font-semibold text-text mb-1">GitHub</h2>
-      <p className="text-text-dim text-sm mb-10">Open source activity & repositories</p>
-
-      {loading ? (
-        <p className="text-text-dim text-sm">Loading…</p>
-      ) : (
-        <div className="space-y-10">
-
-          {stats && (
-            <div className="grid grid-cols-3 gap-4">
-              {[
-                { label: 'Commits', value: stats.totalCommits.toLocaleString() },
-                { label: 'Pull Requests', value: stats.totalPRs.toLocaleString() },
-                { label: 'Issues', value: stats.totalIssues.toLocaleString() },
-              ].map(s => (
-                <div
-                  key={s.label}
-                  className="bg-bg-overlay border border-border rounded-md p-4 text-center"
-                >
-                  <p className="font-display text-xl font-semibold text-accent">{s.value}</p>
-                  <p className="text-text-dim text-xs mt-1">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {topLangs.length > 0 && (
-            <div>
-              <p className="text-text-muted text-xs font-medium mb-3 uppercase tracking-widest">
-                Languages
-              </p>
-              <div className="flex h-2 rounded-full overflow-hidden mb-4">
-                {topLangs.map(([lang, bytes]) => (
-                  <div
-                    key={lang}
-                    style={{
-                      width: `${(bytes / totalLangBytes) * 100}%`,
-                      backgroundColor: LANG_COLORS[lang] ?? '#888',
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="flex flex-wrap gap-x-5 gap-y-2">
-                {topLangs.map(([lang, bytes]) => (
-                  <div key={lang} className="flex items-center gap-1.5 text-xs text-text-dim">
-                    <FaCircle size={8} style={{ color: LANG_COLORS[lang] ?? '#888' }} />
-                    <span>{lang}</span>
-                    <span className="text-text-muted">
-                      {((bytes / totalLangBytes) * 100).toFixed(1)}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div>
-            <p className="text-text-muted text-xs font-medium mb-3 uppercase tracking-widest">
-              Repositories
-            </p>
-            <div className="repo-grid">
-              {(showAll ? repos : repos.slice(0, 9)).map(repo => {
-                const meta = readmeMeta[repo.id]
-                const title = meta?.title || repo.name
-                const description = meta?.description || repo.description
-
-                return (
-                  <div key={repo.id} className="repo-card">
-                    <div className="repo-card-header">
-                      <span className="repo-card-title">{title}</span>
-                      {repo.private && <span className="repo-card-badge">private</span>}
-                    </div>
-
-                    {description && (
-                      <p className="repo-card-desc">{description}</p>
-                    )}
-
-                    <div className="repo-card-footer">
-                      {repo.language && (
-                        <span className="repo-card-stat">
-                          <FaCircle size={7} style={{ color: LANG_COLORS[repo.language] ?? '#888' }} />
-                          {repo.language}
-                        </span>
-                      )}
-                      <span className="repo-card-stat">
-                        <FaCodeFork size={11} /> {repo.forks_count}
-                      </span>
-                      <span className="repo-card-stat">
-                        <FaStar size={11} /> {repo.stargazers_count}
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => openReadme(repo.owner.login, repo.name)}
-                      className="repo-card-details-btn"
-                    >
-                      <FaBookOpen size={11} />
-                      Details
-                    </button>
-                  </div>
-                )
-              })}
-            </div>
-
-            {!showAll && repos.length > 9 && (
-              <div className="flex justify-center mt-8">
-                <button
-                  onClick={() => setShowAll(true)}
-                  className="repo-show-more"
-                >
-                  Show More
-                </button>
-              </div>
-            )}
+    <section id="github" className="py-32">
+      <div className="section-container">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <p className="section-label mb-3">05 / GitHub</p>
+          <div className="ruled-line pb-8 mb-12">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
+              Open source activity.
+            </h2>
           </div>
 
-        </div>
-      )}
+          {loading ? (
+            <p className="text-text-muted text-sm">Loading…</p>
+          ) : (
+            <div className="space-y-10">
+
+              {stats && (
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { label: 'Commits', value: stats.totalCommits.toLocaleString() },
+                    { label: 'Pull Requests', value: stats.totalPRs.toLocaleString() },
+                    { label: 'Issues', value: stats.totalIssues.toLocaleString() },
+                  ].map(s => (
+                    <div
+                      key={s.label}
+                      className="bg-border border border-border-light rounded-md p-4 text-center"
+                    >
+                      <p className="font-display text-xl font-semibold text-accent">{s.value}</p>
+                      <p className="text-text-muted text-xs mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {topLangs.length > 0 && (
+                <div>
+                  <p className="text-text-muted text-xs font-medium mb-3 uppercase tracking-widest">
+                    Languages
+                  </p>
+                  <div className="flex h-2 rounded-full overflow-hidden mb-4">
+                    {topLangs.map(([lang, bytes]) => (
+                      <div
+                        key={lang}
+                        style={{
+                          width: `${(bytes / totalLangBytes) * 100}%`,
+                          backgroundColor: LANG_COLORS[lang] ?? '#888',
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-x-5 gap-y-2">
+                    {topLangs.map(([lang, bytes]) => (
+                      <div key={lang} className="flex items-center gap-1.5 text-xs text-text-muted">
+                        <FaCircle size={8} style={{ color: LANG_COLORS[lang] ?? '#888' }} />
+                        <span>{lang}</span>
+                        <span className="text-text-muted">
+                          {((bytes / totalLangBytes) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <p className="text-text-muted text-xs font-medium mb-3 uppercase tracking-widest">
+                  Repositories
+                </p>
+                <div className="repo-grid">
+                  {(showAll ? repos : repos.slice(0, 9)).map(repo => {
+                    const meta = readmeMeta[repo.id]
+                    const title = meta?.title || repo.name
+                    const description = meta?.description || repo.description
+
+                    return (
+                      <div key={repo.id} className="repo-card">
+                        <div className="repo-card-header">
+                          <span className="repo-card-title">{title}</span>
+                          {repo.private && <span className="repo-card-badge">private</span>}
+                        </div>
+
+                        {description && (
+                          <p className="repo-card-desc">{description}</p>
+                        )}
+
+                        <div className="repo-card-footer">
+                          {repo.language && (
+                            <span className="repo-card-stat">
+                              <FaCircle size={7} style={{ color: LANG_COLORS[repo.language] ?? '#888' }} />
+                              {repo.language}
+                            </span>
+                          )}
+                          <span className="repo-card-stat">
+                            <FaCodeFork size={11} /> {repo.forks_count}
+                          </span>
+                          <span className="repo-card-stat">
+                            <FaStar size={11} /> {repo.stargazers_count}
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={() => openReadme(repo.owner.login, repo.name)}
+                          className="repo-card-details-btn"
+                        >
+                          <FaBookOpen size={11} />
+                          Details
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {!showAll && repos.length > 9 && (
+                  <div className="flex justify-center mt-8">
+                    <button
+                      onClick={() => setShowAll(true)}
+                      className="repo-show-more"
+                    >
+                      Show More
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          )}
+        </motion.div>
+      </div>
 
       {readmeRepo && (
         <ReadmeModal
