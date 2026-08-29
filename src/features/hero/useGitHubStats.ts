@@ -100,42 +100,47 @@ export function useGitHubStats() {
         let fetchedRepos = 0
         let fetchedCommits = 0
 
+        let repoLoaded = false
+        let commitLoaded = false
+
         if (!cancelled && repoRes && repoRes.ok) {
           const data = await repoRes.json()
           fetchedRepos += Array.isArray(data) ? data.length : 0
+          repoLoaded = true
         }
 
         if (!cancelled && repoNGCRes && repoNGCRes.ok) {
           const data = await repoNGCRes.json()
           fetchedRepos += Array.isArray(data) ? data.length : 0
+          repoLoaded = true
         }
 
         if (!cancelled && commitRes && commitRes.ok) {
           const commitData = await commitRes.json()
           fetchedCommits += (commitData.total_count ?? 0) * 2
+          commitLoaded = true
         }
 
         if (!cancelled && commitNGCRes && commitNGCRes.ok) {
           const commitNGCData = await commitNGCRes.json()
           fetchedCommits += (commitNGCData.total_count ?? 0) * 2
+          commitLoaded = true
         }
 
         if (!cancelled) {
-          setRepos(fetchedRepos)
-          setCommits(fetchedCommits)
+          if (repoLoaded) setRepos(fetchedRepos)
+          if (commitLoaded) setCommits(fetchedCommits)
         }
 
         // fetch orgs from both accounts
         const [orgs1, orgs2] = await Promise.all([
           token
-            ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers }).then(r => r.json())
+            ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers }).then(r => r.ok ? r.json() : [])
             : Promise.resolve([]),
           tokenNGC
-            ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers: ngcHeaders }).then(r => r.json())
+            ? fetch(`https://api.github.com/user/orgs?per_page=100`, { headers: ngcHeaders }).then(r => r.ok ? r.json() : [])
             : Promise.resolve([]),
         ])
-
-        console.log('orgs1:', orgs1, 'orgs2:', orgs2)
 
         if (!cancelled) {
           const fetchedOrgs: Array<{ login: string; avatar_url: string; description: string }> = [
@@ -162,7 +167,7 @@ export function useGitHubStats() {
             }))
 
           setOrgs([...HARDCODED_ORGS, ...newOrgs])
-          setCache(fetchedRepos, fetchedCommits)
+          if (repoLoaded && commitLoaded) setCache(fetchedRepos, fetchedCommits)
         }
       } catch {
         /* use fallbacks */

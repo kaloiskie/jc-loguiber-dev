@@ -1,0 +1,22 @@
+@media (max-width: 980px) {
+  .featured-project,
+  .featured-project:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-project:nth-child(even) .featured-project-visual {
+    order: 0;
+  }
+
+  .featured-project-visual img {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 520px) {
+  .featured-project-facts div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}

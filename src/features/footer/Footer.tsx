@@ -6,7 +6,7 @@ function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="contact" className="py-20">
+    <section id="contact" className="page-section">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -14,10 +14,10 @@ function Contact() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">08 / Contact</p>
-          <div className="ruled-line pb-6 mb-10">
+          <p className="section-label">Contact</p>
+          <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
-              Get in touch.
+              Start a useful conversation.
             </h2>
           </div>
 
@@ -68,7 +68,7 @@ function Contact() {
                 GitHub
               </a>
               <a
-                href="https://linkedin.com/in/jc-loguiber"
+                href="https://www.linkedin.com/in/jhon-carlo-loguiber-28070136b/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border-light text-text text-sm font-medium hover:border-accent hover:text-accent transition-all duration-200"

@@ -1,0 +1,145 @@
+.readme-content {
+  max-width: 760px;
+  margin-inline: auto;
+  color: #c9ced8;
+  font-size: 0.925rem;
+  line-height: 1.75;
+}
+
+.readme-content > :first-child {
+  margin-top: 0;
+}
+
+.readme-content h1,
+.readme-content h2,
+.readme-content h3,
+.readme-content h4 {
+  scroll-margin-top: 1rem;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.readme-content h1 {
+  margin: 0 0 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.readme-content h2 {
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 1.6rem;
+}
+
+.readme-content h3 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.2rem;
+}
+
+.readme-content h4 {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.readme-content p,
+.readme-content pre,
+.readme-content ul,
+.readme-content ol,
+.readme-content table,
+.readme-content blockquote {
+  margin-bottom: 1.25rem;
+}
+
+.readme-content a {
+  color: var(--color-accent-hover);
+  text-decoration-color: rgba(145, 130, 255, 0.45);
+  text-underline-offset: 3px;
+}
+
+.readme-content strong {
+  color: var(--color-text);
+}
+
+.readme-content code {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  background: var(--color-surface-raised);
+  color: #d9dcff;
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+}
+
+.readme-content pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  background: #0b0e12;
+}
+
+.readme-content pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.readme-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+}
+
+.readme-content ul,
+.readme-content ol {
+  padding-left: 1.5rem;
+}
+
+.readme-content li {
+  margin-bottom: 0.35rem;
+}
+
+.readme-content blockquote {
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.readme-content hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.readme-content table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.readme-content th,
+.readme-content td {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-border-light);
+  text-align: left;
+}
+
+.readme-content th {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.readme-content input[type='checkbox'] {
+  margin-right: 0.4rem;
+  accent-color: var(--color-accent);
+}

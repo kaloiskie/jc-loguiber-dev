@@ -11,7 +11,7 @@ export const hero = {
   techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Python', 'Android'],
   email: 'jcarlo.loguiber@gmail.com',
   github: 'https://github.com/kaloiskie',
-  linkedin: 'https://linkedin.com/in/jc-loguiber',
+  linkedin: 'https://www.linkedin.com/in/jhon-carlo-loguiber-28070136b/',
   cvLink: '/cv.pdf',
   openToWork: true,
   stats: [

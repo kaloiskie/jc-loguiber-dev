@@ -6,7 +6,7 @@ function Experience() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   return (
-    <section id="experience" className="py-20">
+    <section id="experience" className="page-section">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -14,21 +14,20 @@ function Experience() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">03 / Experience</p>
-          <div className="ruled-line pb-6 mb-10">
+          <p className="section-label">Experience</p>
+          <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
-              Where I have shipped.
+              Where responsibility became production.
             </h2>
           </div>
 
-          <div className="max-w-3xl">
+          <div className="max-w-3xl space-y-12">
             {experiences.map((exp, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
-                className="mb-12"
               >
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
                   <h3 className="font-display text-xl font-semibold text-text">

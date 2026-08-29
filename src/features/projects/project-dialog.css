@@ -1,0 +1,85 @@
+.project-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(5, 7, 10, 0.9);
+}
+
+.project-dialog {
+  width: min(100%, 1180px);
+  max-height: 90vh;
+  overflow: auto;
+  border: 1px solid var(--color-border-light);
+  border-radius: 6px;
+  background: var(--color-bg);
+}
+
+.project-dialog-header,
+.project-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+}
+
+.project-dialog-header span {
+  color: var(--color-accent-hover);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+.project-dialog-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.project-dialog-header button {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--color-border-light);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.project-dialog-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-block: 1px solid var(--color-border-light);
+}
+
+.project-dialog-footer p {
+  max-width: 720px;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.project-dialog-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .project-dialog-backdrop {
+    padding: 0.75rem;
+  }
+
+  .project-dialog-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

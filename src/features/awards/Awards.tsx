@@ -7,7 +7,7 @@ function Awards() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <section id="awards" className="py-20">
+    <section id="awards" className="page-section">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -15,8 +15,8 @@ function Awards() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">07 / Awards</p>
-          <div className="ruled-line pb-6 mb-10">
+          <p className="section-label">Recognition</p>
+          <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               Recognition.
             </h2>

@@ -6,7 +6,7 @@ function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="about" className="py-20">
+    <section id="about" className="page-section">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -14,10 +14,10 @@ function About() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">01 / About</p>
-          <div className="ruled-line pb-6 mb-10">
+          <p className="section-label">Profile / approach</p>
+          <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
-              I build systems that run.
+              Engineering beyond the interface.
             </h2>
           </div>
 

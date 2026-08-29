@@ -1,0 +1,24 @@
+@media (max-width: 980px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    max-width: 760px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-section {
+    padding-top: 2.75rem;
+  }
+
+  .hero-proof {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-proof > div:last-child {
+    grid-column: 1 / -1;
+  }
+}

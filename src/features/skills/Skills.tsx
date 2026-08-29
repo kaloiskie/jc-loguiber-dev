@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { TechIcon } from '@/components/ui/tech-icon'
 import { skillCategories } from './skills.data'
 
 function TechStack() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="tech-stack" className="py-20">
+    <section id="tech-stack" className="page-section">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -14,14 +15,14 @@ function TechStack() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">02 / Tech Stack</p>
-          <div className="ruled-line pb-6 mb-10">
+          <p className="section-label">Technical range</p>
+          <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
-              Tools I work with daily.
+              Tools chosen around the system.
             </h2>
           </div>
 
-          <div className="max-w-3xl space-y-8">
+          <div className="max-w-3xl section-stack">
             {skillCategories.map((cat) => (
               <div key={cat.title}>
                 <p className="font-mono text-xs text-accent mb-3 tracking-wider uppercase">
@@ -31,8 +32,9 @@ function TechStack() {
                   {cat.items.map((item) => (
                     <span
                       key={item}
-                      className="font-mono text-xs px-3 py-1.5 bg-accent-muted text-text border border-accent/10"
+                      className="inline-flex items-center gap-2 font-mono text-xs px-3 py-1.5 bg-accent-muted text-text border border-accent/10"
                     >
+                      <TechIcon name={item} />
                       {item}
                     </span>
                   ))}

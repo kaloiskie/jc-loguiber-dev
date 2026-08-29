@@ -7,7 +7,7 @@ function Education() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="education" className="py-20">
+    <section id="education" className="page-section">
       <div className="section-container">
         <motion.div
           ref={ref}
@@ -15,8 +15,8 @@ function Education() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <p className="section-label mb-3">06 / Education</p>
-          <div className="ruled-line pb-6 mb-10">
+          <p className="section-label">Education</p>
+          <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               Academic foundation.
             </h2>

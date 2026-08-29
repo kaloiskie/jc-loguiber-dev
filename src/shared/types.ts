@@ -4,6 +4,10 @@ export interface Project {
   tech: string[]
   status: 'Production' | 'Active' | 'Internal'
   highlights: string[]
+  featured?: boolean
+  role?: string
+  result?: string
+  architecture?: string[]
   url?: string
   github?: string[]
   image?: string

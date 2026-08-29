@@ -1,78 +1,16 @@
-import { useState, useEffect, useCallback } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/react'
-import { Hero } from './features/hero'
-import { About } from './features/objective'
-import { TechStack } from './features/skills'
-import { Experience } from './features/experience'
-import { Projects } from './features/projects'
-import { GitHub } from './features/github'
-import { Education } from './features/education'
-import { Awards } from './features/awards'
-import { Contact } from './features/footer'
-import { navSections } from './shared/navigation'
-import { Button } from '@/components/ui/button'
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from '@/components/ui/navigation-menu'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
+import { Awards } from '@/features/awards'
+import { Education } from '@/features/education'
+import { Experience } from '@/features/experience'
+import { Contact } from '@/features/footer'
+import { GitHub } from '@/features/github'
+import { Hero } from '@/features/hero'
+import { SiteNavigation } from '@/features/navigation'
+import { About } from '@/features/objective'
+import { Projects } from '@/features/projects'
+import { TechStack } from '@/features/skills'
 
 function App() {
-  const [activeSection, setActiveSection] = useState('hero')
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-
-      const sections = navSections.map((s) => document.getElementById(s.id)).filter(Boolean)
-      const scrollPos = window.scrollY + 120
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i]
-        if (section && section.offsetTop <= scrollPos) {
-          const id = navSections[i].id
-          setActiveSection(id)
-          if (window.location.hash !== `#${id}`) {
-            history.replaceState(null, '', `#${id}`)
-          }
-          break
-        }
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const hash = window.location.hash.replace('#', '')
-    if (hash) {
-      const el = document.getElementById(hash)
-      if (el) {
-        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100)
-      }
-    }
-  }, [])
-
-  const scrollTo = useCallback((id: string) => {
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-      window.location.hash = id
-      setMobileMenuOpen(false)
-    }
-  }, [])
-
   return (
     <div className="min-h-screen bg-bg text-text">
       <Helmet
@@ -80,127 +18,36 @@ function App() {
         titleTemplate="%s — Jhon Carlo L. Loguiber"
       >
         <html lang="en" />
-        <meta name="description" content="Full-Stack Engineer building modern web applications with React, TypeScript, and Node.js." />
+        <meta
+          name="description"
+          content="Full-stack engineer building reliable production systems, real-time workflows, and operational platforms."
+        />
         <meta property="og:title" content="Jhon Carlo L. Loguiber — Full-Stack Engineer" />
-        <meta property="og:description" content="Full-Stack Engineer building modern web applications with React, TypeScript, and Node.js." />
+        <meta
+          property="og:description"
+          content="Full-stack engineer building reliable production systems, real-time workflows, and operational platforms."
+        />
         <meta property="og:image" content="/helmet.png" />
         <meta property="og:image:width" content="761" />
         <meta property="og:image:height" content="440" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Jhon Carlo L. Loguiber — Full-Stack Engineer" />
-        <meta name="twitter:description" content="Full-Stack Engineer building modern web applications with React, TypeScript, and Node.js." />
+        <meta
+          name="twitter:description"
+          content="Full-stack engineer building reliable production systems and real-time operational platforms."
+        />
         <meta name="twitter:image" content="/helmet.png" />
       </Helmet>
-      <Analytics />
-      <SpeedInsights />
 
-      <nav
-        className={cn(
-          'sticky top-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-bg/90 backdrop-blur-md border-b border-border'
-            : 'bg-transparent'
-        )}
-      >
-        <div className="section-container flex items-center justify-between h-14">
-          <div className="flex items-center gap-6">
-            <button
-              onClick={() => scrollTo('hero')}
-              className="font-display text-lg font-semibold text-text hover:text-accent transition-colors"
-            >
-              JC Loguiber
-            </button>
-
-            <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-1">
-                {navSections.map((section) => (
-                  <NavigationMenuItem key={section.id}>
-                    <button
-                      onClick={() => scrollTo(section.id)}
-                      className={cn(
-                        'px-3 py-1.5 text-sm font-medium transition-colors duration-150 cursor-pointer border-b-2 border-transparent hover:border-accent',
-                        activeSection === section.id
-                          ? 'text-accent'
-                          : 'text-text-muted hover:text-text'
-                      )}
-                    >
-                      {section.label}
-                    </button>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Popover open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  className="group size-8 md:hidden"
-                  variant="ghost"
-                  size="icon"
-                >
-                  <svg
-                    className="pointer-events-none"
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 12L20 12"
-                      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
-                    />
-                    <path
-                      d="M4 12H20"
-                      className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
-                    />
-                    <path
-                      d="M4 12H20"
-                      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
-                    />
-                  </svg>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-48 p-1 md:hidden bg-bg border-border">
-                <div className="flex flex-col">
-                  {navSections.map((section) => (
-                    <button
-                      key={section.id}
-                      onClick={() => scrollTo(section.id)}
-                      className={cn(
-                        'w-full px-3 py-2 text-sm font-medium text-left transition-colors cursor-pointer',
-                        activeSection === section.id
-                          ? 'text-accent'
-                          : 'text-text-muted hover:text-text'
-                      )}
-                    >
-                      {section.label}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Button asChild size="sm" className="hidden md:inline-flex text-sm">
-              <a href="/cv.pdf">Download CV</a>
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <SiteNavigation />
 
       <main>
         <Hero />
+        <Projects />
+        <Experience />
         <About />
         <TechStack />
-        <Experience />
-        <Projects />
         <GitHub />
         <Education />
         <Awards />
