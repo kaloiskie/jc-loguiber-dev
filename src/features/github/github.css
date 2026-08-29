@@ -135,6 +135,28 @@
   padding: 0.5rem 1.5rem;
 }
 
+.repo-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.repo-empty a {
+  flex: none;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.repo-empty a:hover {
+  color: var(--color-accent);
+}
+
 .repo-card-details-btn:hover,
 .repo-show-more:hover {
   border-color: var(--color-accent);
@@ -148,6 +170,12 @@
 }
 
 @media (max-width: 640px) {
+  .repo-empty {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .github-metric {
     padding: 1rem 0.75rem;
   }

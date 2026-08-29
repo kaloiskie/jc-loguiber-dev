@@ -39,15 +39,24 @@ export interface ReadmeMeta {
   description?: string
 }
 
-export async function ghFetch(path: string, token = GITHUB_TOKEN) {
-  if (!token) return null
+export function getRepositoriesPath(username: string, token?: string) {
+  if (token) {
+    return '/user/repos?sort=pushed&per_page=100&visibility=all&affiliation=owner,collaborator'
+  }
+
+  return `/users/${username}/repos?sort=pushed&per_page=100&type=owner`
+}
+
+export async function ghFetch(path: string, token?: string) {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+  }
+
+  if (token) headers.Authorization = `Bearer ${token}`
 
   try {
     const response = await fetch(`https://api.github.com${path}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-      },
+      headers,
     })
 
     if (!response.ok) return null

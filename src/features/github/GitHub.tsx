@@ -9,6 +9,7 @@ import {
   GITHUB_TOKEN_NGC,
   ghFetch,
   ghFetchReadmeRaw,
+  getRepositoriesPath,
   parseReadme,
 } from './github-api'
 import type { ReadmeMeta, Repo, Stats } from './github-api'
@@ -18,6 +19,7 @@ export default function GitHub() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [langMap, setLangMap] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
   const [readmeRepo, setReadmeRepo] = useState<{ owner: string; repo: string; token?: string } | null>(null)
   const [showAll, setShowAll] = useState(false)
   const [readmeMeta, setReadmeMeta] = useState<Record<number, ReadmeMeta>>({})
@@ -27,9 +29,11 @@ export default function GitHub() {
     async function load() {
       try {
         const [personalRepos, ngcRepos] = await Promise.all([
-          ghFetch(`/user/repos?sort=pushed&per_page=100&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN),
-          ghFetch(`/user/repos?sort=pushed&per_page=100&visibility=all&affiliation=owner,collaborator`, GITHUB_TOKEN_NGC),
+          ghFetch(getRepositoriesPath('kaloiskie', GITHUB_TOKEN), GITHUB_TOKEN),
+          ghFetch(getRepositoriesPath('northmangamingcorporation-dot', GITHUB_TOKEN_NGC), GITHUB_TOKEN_NGC),
         ])
+
+        setLoadFailed(personalRepos === null && ngcRepos === null)
 
         const seen = new Set<number>()
         const allRepos = [
@@ -145,13 +149,22 @@ export default function GitHub() {
             <div className="section-stack">
 
               <GitHubSummary stats={stats} langMap={langMap} />
-              <RepositoryGrid
-                repos={repos}
-                readmeMeta={readmeMeta}
-                showAll={showAll}
-                onShowAll={() => setShowAll(true)}
-                onOpenReadme={openReadme}
-              />
+              {repos.length > 0 ? (
+                <RepositoryGrid
+                  repos={repos}
+                  readmeMeta={readmeMeta}
+                  showAll={showAll}
+                  onShowAll={() => setShowAll(true)}
+                  onOpenReadme={openReadme}
+                />
+              ) : (
+                <div className="repo-empty" role={loadFailed ? 'alert' : undefined}>
+                  <p>{loadFailed ? 'GitHub is temporarily unavailable.' : 'No public repositories are available.'}</p>
+                  <a href="https://github.com/kaloiskie" target="_blank" rel="noopener noreferrer">
+                    View GitHub profile
+                  </a>
+                </div>
+              )}
 
             </div>
           )}
