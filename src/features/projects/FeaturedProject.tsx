@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react'
+import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Expand } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import type { Project } from '@/shared/types'
 
 interface FeaturedProjectProps {
@@ -44,7 +46,9 @@ function FeaturedProject({ project, index, onPreview }: FeaturedProjectProps) {
       </button>
 
       <div className="featured-project-copy">
-        <p className="featured-project-kicker">Production case study</p>
+        <p className="featured-project-kicker">
+          {project.status === 'Production' ? 'Production case study' : 'Live system case study'}
+        </p>
         <h3>{project.title}</h3>
         <p className="featured-project-description">{project.description}</p>
 
@@ -70,12 +74,19 @@ function FeaturedProject({ project, index, onPreview }: FeaturedProjectProps) {
         </ul>
 
         <div className="featured-project-links">
-          <button type="button" onClick={() => onPreview(project)}>
-            Explore case study
-          </button>
+          {project.slug && (
+            <Link to={`/projects/${project.slug}`}>
+              Explore case study <ArrowUpRight size={14} />
+            </Link>
+          )}
           {project.url && (
             <a href={project.url} target="_blank" rel="noopener noreferrer">
               Live site <ArrowUpRight size={14} />
+            </a>
+          )}
+          {project.repository && (
+            <a href={project.repository} target="_blank" rel="noopener noreferrer">
+              Source <GitHubLogoIcon width={14} height={14} />
             </a>
           )}
         </div>

@@ -6,6 +6,7 @@
 @import "./features/projects/featured-project.css";
 @import "./features/projects/featured-project-responsive.css";
 @import "./features/projects/project-dialog.css";
+@import "./features/projects/case-study.css";
 @import "./features/github/github.css";
 @import "./features/github/readme-modal.css";
 @import "./features/github/readme-content.css";

@@ -42,6 +42,10 @@
   text-transform: uppercase;
 }
 
+.readme-header .readme-private-label {
+  color: var(--color-warning);
+}
+
 .readme-header h2 {
   overflow: hidden;
   color: var(--color-text);

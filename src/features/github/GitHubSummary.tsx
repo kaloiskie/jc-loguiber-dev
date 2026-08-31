@@ -1,57 +1,60 @@
 import { FaCircle } from 'react-icons/fa6'
 import { LANG_COLORS } from './github-api'
-import type { Stats } from './github-api'
+import type { Repo } from './github-api'
 
 interface GitHubSummaryProps {
-  stats: Stats | null
-  langMap: Record<string, number>
+  repos: Repo[]
 }
 
-function GitHubSummary({ stats, langMap }: GitHubSummaryProps) {
-  const totalLanguageBytes = Object.values(langMap).reduce((sum, bytes) => sum + bytes, 0)
-  const topLanguages = Object.entries(langMap)
+function GitHubSummary({ repos }: GitHubSummaryProps) {
+  const privateCount = repos.filter((repo) => repo.private).length
+  const organizationCount = repos.filter((repo) => repo.relationship === 'organization').length
+  const languageCounts = repos.reduce<Record<string, number>>((counts, repo) => {
+    if (repo.language) counts[repo.language] = (counts[repo.language] ?? 0) + 1
+    return counts
+  }, {})
+  const totalLanguages = Object.values(languageCounts).reduce((sum, count) => sum + count, 0)
+  const topLanguages = Object.entries(languageCounts)
     .sort((first, second) => second[1] - first[1])
     .slice(0, 6)
 
   return (
     <>
-      {stats && (
-        <div className="github-metrics">
-          {[
-            { label: 'Commits', value: stats.totalCommits.toLocaleString() },
-            { label: 'Pull Requests', value: stats.totalPRs.toLocaleString() },
-            { label: 'Issues', value: stats.totalIssues.toLocaleString() },
-          ].map((metric) => (
-            <div key={metric.label} className="github-metric">
-              <p>{metric.value}</p>
-              <span>{metric.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="github-metrics" aria-label="Repository catalog summary">
+        {[
+          { label: 'Qualified repositories', value: repos.length },
+          { label: 'Private systems', value: privateCount },
+          { label: 'Organization work', value: organizationCount },
+        ].map((metric) => (
+          <div key={metric.label} className="github-metric">
+            <p>{metric.value}</p>
+            <span>{metric.label}</span>
+          </div>
+        ))}
+      </div>
 
-      {topLanguages.length > 0 && (
+      {topLanguages.length > 0 && totalLanguages > 0 && (
         <div>
           <p className="mb-3 text-xs font-medium uppercase tracking-widest text-text-muted">
-            Languages
+            Primary languages by repository
           </p>
-          <div className="mb-4 flex h-2 overflow-hidden rounded-full">
-            {topLanguages.map(([language, bytes]) => (
+          <div className="github-language-bar" aria-hidden="true">
+            {topLanguages.map(([language, count]) => (
               <div
                 key={language}
                 style={{
-                  width: `${(bytes / totalLanguageBytes) * 100}%`,
+                  width: `${(count / totalLanguages) * 100}%`,
                   backgroundColor: LANG_COLORS[language] ?? '#888',
                 }}
               />
             ))}
           </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            {topLanguages.map(([language, bytes]) => (
-              <div key={language} className="flex items-center gap-1.5 text-xs text-text-muted">
+          <div className="github-language-key">
+            {topLanguages.map(([language, count]) => (
+              <div key={language}>
                 <FaCircle size={8} style={{ color: LANG_COLORS[language] ?? '#888' }} />
                 <span>{language}</span>
-                <span>{((bytes / totalLanguageBytes) * 100).toFixed(1)}%</span>
+                <span>{Math.round((count / totalLanguages) * 100)}%</span>
               </div>
             ))}
           </div>

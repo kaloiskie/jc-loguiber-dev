@@ -1,4 +1,5 @@
 export interface Project {
+  slug?: string
   title: string
   description: string
   tech: string[]
@@ -9,9 +10,19 @@ export interface Project {
   result?: string
   architecture?: string[]
   url?: string
+  repository?: string
   github?: string[]
   image?: string
   accent?: string
+  caseStudy?: {
+    context: string
+    challenge: string
+    constraints: string[]
+    decisions: Array<{
+      title: string
+      description: string
+    }>
+  }
 }
 
 export interface Section {

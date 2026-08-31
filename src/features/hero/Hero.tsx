@@ -3,10 +3,9 @@ import { ArrowDown, Download, Mail } from 'lucide-react'
 import { FaGithub, FaLinkedinIn } from 'react-icons/fa'
 import { hero } from './hero.data'
 import { SystemTrace } from './SystemTrace'
-import { useGitHubStats } from './useGitHubStats'
 
 function Hero() {
-  const { yearsExp, commitsDisplay } = useGitHubStats()
+  const yearsExp = `${Math.max(1, new Date().getUTCFullYear() - 2022)}+`
 
   return (
     <section id="hero" className="hero-section">
@@ -53,8 +52,8 @@ function Hero() {
               <span>years building</span>
             </div>
             <div>
-              <strong>{commitsDisplay ?? hero.stats[2].value}</strong>
-              <span>commits shipped</span>
+              <strong>Production</strong>
+              <span>systems operated</span>
             </div>
             <div>
               <strong>Full stack</strong>
