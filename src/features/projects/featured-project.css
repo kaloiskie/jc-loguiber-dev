@@ -5,6 +5,8 @@
   border: 1px solid var(--color-border-light);
   border-radius: 6px;
   background: var(--color-surface);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .featured-project:nth-child(even) {

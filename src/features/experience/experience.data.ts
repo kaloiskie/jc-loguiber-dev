@@ -7,23 +7,21 @@ export const experiences: ExperienceItem[] = [
     location: 'Tagum City, Davao del Norte, Philippines',
     period: 'March 2026 – Present',
     highlights: [
-      'Leads team of 2 IT staff, assigns tasks and monitors performance',
-      'Oversees system admin, network management, and incident response',
-      'Plans infrastructure upgrades and aligns IT with business objectives',
+      'Lead and supervise a two-person IT team, assigning work, monitoring performance, and providing technical guidance',
+      'Oversee daily IT operations across system administration, network management, user support, incident response, escalation, and root-cause analysis',
+      'Plan system improvements, infrastructure upgrades, security measures, documentation, standard operating procedures, and IT-policy compliance',
     ],
   },
   {
     role: 'IT Staff',
     company: 'Northman Gaming Corporation',
     location: 'Tagum City, Davao del Norte, Philippines',
-    period: 'June 2025 – February 2026',
+    period: 'June 2025 – March 2026',
     highlights: [
-      'Built and maintained full-stack gaming dashboard (React + Node.js + PostgreSQL)',
-      'Engineered SQS/RQ async queue layer with concurrency limiting and SQLite-backed persistence',
-      'Built real-time features: socket reconnection, live dashboards, announcement system, QR device linking',
-      'Developed Telegram bot ecosystem: sales reports, fleet alerts, AI-generated staff summaries via Ollama/llama3.2',
-      'Built IT service request system with 9 chat-based request flows',
-      'Oversaw Android MDM app (NexusAgent) with silent APK self-update and remote device management',
+      'Developed and maintained company websites and full-stack web applications using Vite, React, Express.js, Node.js, and Python',
+      'Managed and optimized PostgreSQL and MySQL databases, network configuration, performance monitoring, and IT security protocols',
+      'Built and maintained the full-stack gaming dashboard with real-time sockets, QR device linking, and approval workflows',
+      'Developed an async queue layer, a Telegram bot ecosystem, and the NexusAgent Android MDM app',
     ],
   },
   {
@@ -32,8 +30,8 @@ export const experiences: ExperienceItem[] = [
     location: 'Davao del Norte, Philippines',
     period: 'October 2023 – January 2024',
     highlights: [
-      'Assisted in system maintenance, network troubleshooting, and database management across government departments',
-      'Provided hardware/software support and participated in IT infrastructure projects',
+      'Assisted with maintenance and troubleshooting of computer systems and office networks across city departments',
+      'Supported database management, records digitization, hardware setup, software installation, system updates, and IT-related projects',
     ],
   },
 ]

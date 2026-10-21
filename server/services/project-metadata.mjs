@@ -32,6 +32,25 @@ const PROJECT_METADATA = new Map([
   }],
 ])
 
+const PAGE_METADATA = new Map([
+  ['/about', {
+    title: 'About - Jhon Carlo L. Loguiber',
+    description: 'Profile, technical range, education, and recognition for Jhon Carlo L. Loguiber, a full-stack developer building production systems.',
+  }],
+  ['/experience', {
+    title: 'Experience - Jhon Carlo L. Loguiber',
+    description: 'Work experience and leadership history across software development, IT supervision, and production operations.',
+  }],
+  ['/projects', {
+    title: 'Projects - Jhon Carlo L. Loguiber',
+    description: 'Selected production systems, operational platforms, and shipped work by Jhon Carlo L. Loguiber.',
+  }],
+  ['/contact', {
+    title: 'Contact - Jhon Carlo L. Loguiber',
+    description: 'Contact Jhon Carlo L. Loguiber for remote full-stack development opportunities and production system work.',
+  }],
+])
+
 function escapeAttribute(value) {
   return value
     .replaceAll('&', '&amp;')
@@ -48,15 +67,8 @@ function replaceMeta(document, attribute, name, content) {
     : document.replace('</head>', `    ${tag}\\n  </head>`)
 }
 
-export function renderProjectDocument(document, pathname) {
-  const match = /^\/projects\/([a-z0-9-]+)\/?$/.exec(pathname)
-  if (!match) return document
-
-  const metadata = PROJECT_METADATA.get(match[1])
-  if (!metadata) return document
-
-  const canonicalUrl = `${BASE_URL}/projects/${match[1]}`
-  const imageUrl = `${BASE_URL}${metadata.image}`
+function renderPage(document, metadata, pathname, type) {
+  const canonicalUrl = `${BASE_URL}${pathname}`
   let rendered = document.replace(
     /<title>[^<]*<\/title>/i,
     `<title data-rh="true">${escapeAttribute(metadata.title)}</title>`,
@@ -69,16 +81,35 @@ export function renderProjectDocument(document, pathname) {
   rendered = replaceMeta(rendered, 'property', 'og:title', metadata.title)
   rendered = replaceMeta(rendered, 'property', 'og:description', metadata.description)
   rendered = replaceMeta(rendered, 'property', 'og:url', canonicalUrl)
-  rendered = replaceMeta(rendered, 'property', 'og:type', 'article')
-  rendered = replaceMeta(rendered, 'property', 'og:image', imageUrl)
-  rendered = replaceMeta(rendered, 'property', 'og:image:secure_url', imageUrl)
-  rendered = replaceMeta(rendered, 'property', 'og:image:width', String(metadata.imageWidth))
-  rendered = replaceMeta(rendered, 'property', 'og:image:height', String(metadata.imageHeight))
-  const imageAlt = metadata.imageAlt ?? `${metadata.title} production interface`
-  rendered = replaceMeta(rendered, 'property', 'og:image:alt', imageAlt)
+  rendered = replaceMeta(rendered, 'property', 'og:type', type)
   rendered = replaceMeta(rendered, 'name', 'twitter:title', metadata.title)
   rendered = replaceMeta(rendered, 'name', 'twitter:description', metadata.description)
-  rendered = replaceMeta(rendered, 'name', 'twitter:image', imageUrl)
-  rendered = replaceMeta(rendered, 'name', 'twitter:image:alt', imageAlt)
   return rendered
+}
+
+export function renderDocument(document, pathname) {
+  const normalizedPath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '')
+  const projectMatch = /^\/projects\/([a-z0-9-]+)$/.exec(normalizedPath)
+
+  if (projectMatch) {
+    const metadata = PROJECT_METADATA.get(projectMatch[1])
+    if (!metadata) return document
+
+    const imageUrl = `${BASE_URL}${metadata.image}`
+    let rendered = renderPage(document, metadata, normalizedPath, 'article')
+    rendered = replaceMeta(rendered, 'property', 'og:image', imageUrl)
+    rendered = replaceMeta(rendered, 'property', 'og:image:secure_url', imageUrl)
+    rendered = replaceMeta(rendered, 'property', 'og:image:width', String(metadata.imageWidth))
+    rendered = replaceMeta(rendered, 'property', 'og:image:height', String(metadata.imageHeight))
+    const imageAlt = metadata.imageAlt ?? `${metadata.title} production interface`
+    rendered = replaceMeta(rendered, 'property', 'og:image:alt', imageAlt)
+    rendered = replaceMeta(rendered, 'name', 'twitter:image', imageUrl)
+    rendered = replaceMeta(rendered, 'name', 'twitter:image:alt', imageAlt)
+    return rendered
+  }
+
+  const pageMetadata = PAGE_METADATA.get(normalizedPath)
+  if (!pageMetadata) return document
+
+  return renderPage(document, pageMetadata, normalizedPath, 'website')
 }

@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { githubRouter } from './api/github.mjs'
-import { renderProjectDocument } from './services/project-metadata.mjs'
+import { renderDocument } from './services/project-metadata.mjs'
 
 const app = express()
 const port = Number.parseInt(process.env.PORT ?? '3002', 10)
@@ -46,7 +46,7 @@ app.use((request, response) => {
   }
 
   response.set('Cache-Control', 'no-cache')
-  response.type('html').send(renderProjectDocument(indexDocument, request.path))
+  response.type('html').send(renderDocument(indexDocument, request.path))
 })
 
 app.listen(port, '0.0.0.0', () => {

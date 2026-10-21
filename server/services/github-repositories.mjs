@@ -20,6 +20,7 @@ const SELECTED_REPOSITORIES = new Set([
 ])
 
 let cache = null
+let refreshPromise = null
 const publicReadmeCache = new Map()
 const privateReadmePreviewCache = new Map()
 const readmeSummaryCache = new Map()
@@ -202,7 +203,7 @@ async function fetchReadmeMarkdown(repository) {
       },
     )
 
-    if (response.status === 404) continue
+    if (response.status === 401 || response.status === 403 || response.status === 404) continue
     if (!response.ok) throw new Error(`GitHub README request failed with status ${response.status}`)
 
     const contentLength = Number.parseInt(response.headers.get('content-length') ?? '0', 10)
@@ -306,15 +307,22 @@ async function refreshRepositories() {
 
 export async function getRepositories() {
   if (cache && Date.now() - cache.createdAt < CACHE_TTL_MS) return cache.repositories
-
-  try {
-    const repositories = await refreshRepositories()
-    cache = { createdAt: Date.now(), repositories }
-    return repositories
-  } catch (error) {
-    if (cache) return cache.repositories
-    throw error
+  if (!refreshPromise) {
+    refreshPromise = refreshRepositories().then(
+      (repositories) => {
+        cache = { createdAt: Date.now(), repositories }
+        return repositories
+      },
+      (error) => {
+        if (cache) return cache.repositories
+        throw error
+      },
+    ).finally(() => {
+      refreshPromise = null
+    })
   }
+
+  return refreshPromise
 }
 
 export async function getRepositoryReadmePreview(owner, repositoryName) {

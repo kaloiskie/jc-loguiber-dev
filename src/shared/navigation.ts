@@ -1,9 +1,12 @@
-import type { Section } from './types'
+export interface NavItem {
+  to: string
+  label: string
+}
 
-export const navSections: Section[] = [
-  { id: 'projects', label: 'Selected work' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'about', label: 'About' },
-  { id: 'github', label: 'GitHub' },
-  { id: 'contact', label: 'Contact' },
+export const navItems: NavItem[] = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/experience', label: 'Experience' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/contact', label: 'Contact' },
 ]

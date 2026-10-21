@@ -6,6 +6,6 @@ export const awards: Award[] = [
     organization: 'Northman Gaming Corporation',
     date: 'December 2025',
     description:
-      'Recognized for technical contributions and dedication in the IT Department.',
+      'Recognized for outstanding performance, technical competency, and contributions to IT department goals.',
   },
 ]

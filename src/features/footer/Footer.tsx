@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { FaEnvelope, FaGithub, FaLinkedin, FaMapMarkerAlt, FaClock } from 'react-icons/fa'
+import { FaEnvelope, FaGithub, FaLinkedin, FaMapMarkerAlt, FaClock, FaPhone } from 'react-icons/fa'
 
 function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
@@ -38,6 +38,24 @@ function Contact() {
                 <span className="text-text-muted text-sm">
                   Philippine Standard Time (UTC+8)
                 </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <FaPhone className="text-accent shrink-0" size={14} />
+                <a
+                  href="tel:+639514567270"
+                  className="text-text-muted text-sm hover:text-accent transition-colors"
+                >
+                  +63 951-456-7270
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <FaPhone className="text-accent shrink-0" size={14} />
+                <a
+                  href="tel:+639939189937"
+                  className="text-text-muted text-sm hover:text-accent transition-colors"
+                >
+                  +63 993-918-9937
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <FaEnvelope className="text-accent shrink-0" size={14} />

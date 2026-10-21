@@ -25,11 +25,6 @@ export interface Project {
   }
 }
 
-export interface Section {
-  id: string
-  label: string
-}
-
 export interface ExperienceItem {
   role: string
   company: string
@@ -61,4 +56,11 @@ export interface EducationItem {
   school: string
   period: string
   details: string[]
+}
+
+export interface LeadershipItem {
+  role: string
+  organization: string
+  period: string
+  highlights: string[]
 }

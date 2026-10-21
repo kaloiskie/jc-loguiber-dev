@@ -18,7 +18,7 @@ function ProjectCaseStudyPage() {
   }, [project?.title, slug])
 
   if (!project?.featured || !project.slug || !project.caseStudy) {
-    return <Navigate to="/#projects" replace />
+    return <Navigate to="/projects" replace />
   }
 
   const canonicalUrl = `https://jc-loguiber.site/projects/${project.slug}`
@@ -65,7 +65,7 @@ function ProjectCaseStudyPage() {
 
       <header className="case-study-nav">
         <div className="case-study-container">
-          <Link to="/#projects" className="case-study-back">
+          <Link to="/projects" className="case-study-back">
             <ArrowLeft size={16} />
             Selected work
           </Link>
@@ -167,7 +167,7 @@ function ProjectCaseStudyPage() {
 
         <section className="case-study-section case-study-container">
           <div className="case-study-section-heading">
-            <span>03 / Engineering decisions</span>
+            <span>03 / Development decisions</span>
             <h2>Choices made for the workflow.</h2>
           </div>
           <div className="case-study-decisions">
@@ -195,7 +195,7 @@ function ProjectCaseStudyPage() {
               {project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
             </ul>
             <div className="case-study-outcome-links">
-              <Link to="/#projects"><ArrowLeft size={15} /> All selected work</Link>
+              <Link to="/projects"><ArrowLeft size={15} /> All selected work</Link>
               {project.url && (
                 <a href={project.url} target="_blank" rel="noopener noreferrer">
                   Open live system <ArrowUpRight size={15} />

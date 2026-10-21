@@ -22,6 +22,7 @@ export default function GitHub() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   useEffect(() => {
+    if (!inView) return
     const controller = new AbortController()
 
     fetchRepositoryCatalog(controller.signal)
@@ -36,7 +37,7 @@ export default function GitHub() {
       .finally(() => setLoading(false))
 
     return () => controller.abort()
-  }, [])
+  }, [inView])
 
   const openReadme = useCallback((owner: string, repo: string, isPrivate: boolean) => {
     setReadmeRepo({ owner, repo, private: isPrivate })

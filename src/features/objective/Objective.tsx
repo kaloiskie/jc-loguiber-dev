@@ -17,7 +17,7 @@ function About() {
           <p className="section-label">Profile / approach</p>
           <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
-              Engineering beyond the interface.
+              Development beyond the interface.
             </h2>
           </div>
 

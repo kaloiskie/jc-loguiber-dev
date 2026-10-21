@@ -2,12 +2,16 @@ import type { SkillCategory } from '../../shared/types'
 
 export const skillCategories: SkillCategory[] = [
   {
-    title: 'Frontend',
+    title: 'Frontend & mobile',
     items: [
+      'JavaScript',
+      'TypeScript',
       'React',
+      'React Native',
+      'Next.js',
       'Vite',
-      'Socket.io (client)',
       'Tailwind',
+      'Socket.io (client)',
     ],
   },
   {
@@ -15,8 +19,10 @@ export const skillCategories: SkillCategory[] = [
     items: [
       'Node.js',
       'Express.js',
+      'Fastify',
       'Python',
       'VB.NET',
+      'Android',
     ],
   },
   {
@@ -28,9 +34,21 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
   {
+    title: 'APIs & Integration',
+    items: [
+      'REST APIs',
+      'JSON',
+      'Webhooks',
+      'Third-party integrations',
+    ],
+  },
+  {
     title: 'Infrastructure',
     items: [
       'Ubuntu Server',
+      'Local area networks',
+      'User support',
+      'Incident response',
       'PM2',
       'Tailscale',
       'AWS EC2',
@@ -50,9 +68,21 @@ export const skillCategories: SkillCategory[] = [
     title: 'AI / Automation',
     items: [
       'Ollama',
+      'Machine learning',
       'Telegram Bot API',
       'Python scripts',
       'Google Apps Script',
+    ],
+  },
+  {
+    title: 'Creative Tools',
+    items: [
+      'Photoshop',
+      'Premiere Pro',
+      'After Effects',
+      'Canva',
+      'Adobe Acrobat',
+      'Microsoft Office',
     ],
   },
 ]

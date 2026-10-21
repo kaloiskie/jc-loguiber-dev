@@ -6,8 +6,7 @@ export const education: EducationItem[] = [
     school: 'University of Mindanao, Tagum Branch',
     period: '2021–2025',
     details: [
-      'AURIUM Editor-in-Chief (2025) — led the yearbook publication and editorial team.',
-      'CoDeS President (2023–2024) — directed programs, workshops, and initiatives for the Computer Debuggers Society.',
+      'Coursework: programming, database management, networking, systems analysis, web technologies, software development, and IT infrastructure.',
     ],
   },
 ]

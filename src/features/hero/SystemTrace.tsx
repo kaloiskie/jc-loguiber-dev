@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { Database, Layers3, Monitor, Radio, Server } from 'lucide-react'
 
 const traceNodes = [
@@ -30,8 +31,8 @@ function SystemTrace() {
         </div>
       </div>
 
-      <a
-        href="#projects"
+      <Link
+        to="/projects"
         className="system-trace-preview"
         aria-label="Explore the Northman Gaming Dashboard case study"
       >
@@ -40,7 +41,7 @@ function SystemTrace() {
           alt="Northman Gaming operations platform homepage"
         />
         <span className="system-trace-preview-label">Explore system</span>
-      </a>
+      </Link>
 
       <div className="system-trace-route" aria-label="Application request path">
         {traceNodes.map((node, index) => {

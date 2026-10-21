@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Download, Menu, X } from 'lucide-react'
+import { Link, NavLink } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
@@ -12,49 +13,18 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { navSections } from '@/shared/navigation'
+import { navItems } from '@/shared/navigation'
 
 function SiteNavigation() {
-  const [activeSection, setActiveSection] = useState('hero')
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 24)
-      const scrollPosition = window.scrollY + 140
-
-      for (let index = navSections.length - 1; index >= 0; index -= 1) {
-        const section = document.getElementById(navSections[index].id)
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(navSections[index].id)
-          return
-        }
-      }
-
-      setActiveSection('hero')
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 24)
 
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const initialSection = window.location.hash.slice(1)
-    if (!initialSection) return
-
-    const frame = requestAnimationFrame(() => {
-      document.getElementById(initialSection)?.scrollIntoView()
-    })
-
-    return () => cancelAnimationFrame(frame)
-  }, [])
-
-  const scrollTo = useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-    history.replaceState(null, '', `#${id}`)
-    setMobileMenuOpen(false)
   }, [])
 
   return (
@@ -66,35 +36,37 @@ function SiteNavigation() {
       )}
     >
       <div className="section-container flex h-16 items-center justify-between">
-        <button
-          type="button"
-          onClick={() => scrollTo('hero')}
+        <Link
+          to="/"
           className="flex items-center gap-3 text-left"
-          aria-label="Back to top"
+          aria-label="Jhon Carlo Loguiber, back to home"
+          onClick={() => setMobileMenuOpen(false)}
         >
           <span className="flex size-8 items-center justify-center border border-border-light font-mono text-xs text-accent">
             JC
           </span>
           <span className="font-display text-sm font-semibold text-text">Jhon Carlo Loguiber</span>
-        </button>
+        </Link>
 
         <div className="flex items-center gap-3">
           <NavigationMenu className="max-lg:hidden">
             <NavigationMenuList className="gap-1">
-              {navSections.map((section) => (
-                <NavigationMenuItem key={section.id}>
-                  <button
-                    type="button"
-                    onClick={() => scrollTo(section.id)}
-                    className={cn(
-                      'px-3 py-2 text-sm transition-colors',
-                      activeSection === section.id
-                        ? 'text-text'
-                        : 'text-text-muted hover:text-text',
-                    )}
+              {navItems.map((item) => (
+                <NavigationMenuItem key={item.to}>
+                  <NavLink
+                    to={item.to}
+                    end={item.to === '/'}
+                    className={({ isActive }) =>
+                      cn(
+                        'px-3 py-2 text-sm transition-colors',
+                        isActive
+                          ? 'text-text underline decoration-accent decoration-2 underline-offset-8'
+                          : 'text-text-muted hover:text-text',
+                      )
+                    }
                   >
-                    {section.label}
-                  </button>
+                    {item.label}
+                  </NavLink>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
@@ -120,20 +92,21 @@ function SiteNavigation() {
             </PopoverTrigger>
             <PopoverContent align="end" className="w-56 rounded-sm border-border-light bg-surface p-2 lg:hidden">
               <div className="flex flex-col">
-                {navSections.map((section) => (
-                  <button
-                    key={section.id}
-                    type="button"
-                    onClick={() => scrollTo(section.id)}
-                    className={cn(
-                      'w-full px-3 py-2.5 text-left text-sm transition-colors',
-                      activeSection === section.id
-                        ? 'bg-surface-raised text-text'
-                        : 'text-text-muted hover:text-text',
-                    )}
+                {navItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.to === '/'}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        'w-full px-3 py-2.5 text-left text-sm transition-colors',
+                        isActive ? 'bg-surface-raised text-text' : 'text-text-muted hover:text-text',
+                      )
+                    }
                   >
-                    {section.label}
-                  </button>
+                    {item.label}
+                  </NavLink>
                 ))}
               </div>
             </PopoverContent>

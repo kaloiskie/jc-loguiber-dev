@@ -36,7 +36,7 @@ export function fetchReadmePreview(
   signal?: AbortSignal,
 ) {
   const path = `/api/github/repositories/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/readme`
-  return fetch(`${path}?preview=redacted-v2`, {
+  return fetch(path, {
     headers: { Accept: 'text/markdown' },
     signal,
   })

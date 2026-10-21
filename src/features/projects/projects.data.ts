@@ -116,7 +116,7 @@ export const projects: Project[] = [
     tech: ['React', 'Node.js', 'Express', 'PostgreSQL'],
     status: 'Production',
     featured: true,
-    role: 'Product engineering across frontend and backend',
+    role: 'Product development across frontend and backend',
     result: 'Centralized employee requests and approval workflows for a multi-outlet workforce.',
     architecture: ['React portal', 'Express services', 'PostgreSQL', 'Role-based access'],
     accent: '#32d583',
