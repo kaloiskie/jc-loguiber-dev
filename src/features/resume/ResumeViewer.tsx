@@ -47,10 +47,10 @@ function ResumeViewer({ onClose }: ResumeViewerProps) {
         </header>
 
         <div className="resume-body">
-          <iframe
-            title="Jhon Carlo L. Loguiber résumé"
-            src="/cv.pdf"
-            className="resume-pdf"
+          <img
+            src="/cv-page-1.png"
+            alt="Preview of Jhon Carlo L. Loguiber's résumé"
+            className="resume-preview"
           />
         </div>
       </div>
