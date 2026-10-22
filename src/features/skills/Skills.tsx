@@ -16,6 +16,9 @@ function TechStack() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p className="section-label">Technical range</p>
+          <p className="font-mono text-xs text-text/70 mb-4 max-w-2xl leading-relaxed">
+            Chosen per layer rather than per trend: a typed product surface, framework-free domain logic behind typed APIs, two database engines plus a queue tier, and an operating layer I run myself. Every tool below is in production.
+          </p>
           <div className="section-heading ruled-line">
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-text">
               Tools chosen around the system.

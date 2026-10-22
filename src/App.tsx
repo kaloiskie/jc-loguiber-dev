@@ -6,6 +6,7 @@ import { AboutPage } from '@/pages/AboutPage'
 import { ContactPage } from '@/pages/ContactPage'
 import { ExperiencePage } from '@/pages/ExperiencePage'
 import { ProjectsPage } from '@/pages/ProjectsPage'
+import { FlowsPage } from '@/pages/FlowsPage'
 import { SmoothScroll } from '@/shared/SmoothScroll'
 import { ScrollReveals } from '@/shared/ScrollReveals'
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/experience" element={<ExperiencePage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/flows" element={<FlowsPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Route>
         <Route path="/projects/:slug" element={<ProjectCaseStudyPage />} />
